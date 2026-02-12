@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 7aff86b6623c65a47a53e65e059b44da
+TextScriptImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 403
+  packageName: Edy's Vehicle Physics
+  packageVersion: 5.5.3
+  assetPath: Assets/EVP5/Unity Project Settings/Readme - Project Settings.txt
+  uploadId: 784610

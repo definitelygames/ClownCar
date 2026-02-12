@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 2ebf004673b6248418228e201e70d683
+timeCreated: 1427672301
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 403
+  packageName: Edy's Vehicle Physics
+  packageVersion: 5.5.3
+  assetPath: Assets/Examples/EVP/Prefabs/L200-Red.prefab
+  uploadId: 784610

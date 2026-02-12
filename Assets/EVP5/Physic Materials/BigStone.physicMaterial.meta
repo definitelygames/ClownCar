@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: 537e0ecef87f9ac459f7000be0db17a9
+labels:
+- car
+- vehicle
+- wheel
+- tire
+- physics
+- bus
+- truck
+- suspension
+- skidmark
+- pickup
+- carpaint
+- driving
+AssetOrigin:
+  serializedVersion: 1
+  productId: 403
+  packageName: Edy's Vehicle Physics
+  packageVersion: 5.5.3
+  assetPath: Assets/EVP5/Physic Materials/BigStone.physicMaterial
+  uploadId: 784610

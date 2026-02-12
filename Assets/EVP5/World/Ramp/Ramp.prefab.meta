@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 86dfaea47b7cb4b49937e8a14daabf47
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 403
+  packageName: Edy's Vehicle Physics
+  packageVersion: 5.5.3
+  assetPath: Assets/EVP5/World/Ramp/Ramp.prefab
+  uploadId: 784610

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: eaaf47bbe54617b41849ecede89dfc78
+timeCreated: 1427460454
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 403
+  packageName: Edy's Vehicle Physics
+  packageVersion: 5.5.3
+  assetPath: Assets/EVP5/Vehicles/L200/Materials/L200-NewPickup Truck Texture.mat
+  uploadId: 784610

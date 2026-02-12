@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: e227284ab78ef76499cf9036eba3fc32
+timeCreated: 1436093466
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 403
+  packageName: Edy's Vehicle Physics
+  packageVersion: 5.5.3
+  assetPath: Assets/EVP5/Scripts/Ground Materials/GroundMaterialManager.cs
+  uploadId: 784610

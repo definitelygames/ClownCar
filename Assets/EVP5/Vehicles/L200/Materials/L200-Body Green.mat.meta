@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 4539a7af2fce08c4183d911fba4e0be3
+timeCreated: 1429890530
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 403
+  packageName: Edy's Vehicle Physics
+  packageVersion: 5.5.3
+  assetPath: Assets/EVP5/Vehicles/L200/Materials/L200-Body Green.mat
+  uploadId: 784610

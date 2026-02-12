@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 71b23768087b011449e7f8575dbef679
+timeCreated: 1427455058
+licenseType: Store
+DefaultImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 403
+  packageName: Edy's Vehicle Physics
+  packageVersion: 5.5.3
+  assetPath: Assets/Examples/EVP/Scenes/The City - Simple Scene.unity
+  uploadId: 784610

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 158853047e2a80442a89e94631eaccb5
+timeCreated: 1426543680
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 403
+  packageName: Edy's Vehicle Physics
+  packageVersion: 5.5.3
+  assetPath: Assets/EVP5/Vehicles/L200/Materials/L200-Glass.mat
+  uploadId: 784610

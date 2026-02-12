@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 04c0d58e883532c4590bce14b1be25c0
+timeCreated: 1437661112
+licenseType: Store
+ShaderImporter:
+  defaultTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 403
+  packageName: Edy's Vehicle Physics
+  packageVersion: 5.5.3
+  assetPath: Assets/EVP5/Visual Effects/Shaders/EVP Particles Alpha Blended Shadows.shader
+  uploadId: 784610

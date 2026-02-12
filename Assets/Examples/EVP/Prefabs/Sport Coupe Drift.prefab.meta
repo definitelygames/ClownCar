@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 4292160a5e1fde347934ac660b2c5d30
+timeCreated: 1465224205
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 403
+  packageName: Edy's Vehicle Physics
+  packageVersion: 5.5.3
+  assetPath: Assets/Examples/EVP/Prefabs/Sport Coupe Drift.prefab
+  uploadId: 784610

@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: e5945322afb32da4fa29c050be787db2
+timeCreated: 1435662610
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 403
+  packageName: Edy's Vehicle Physics
+  packageVersion: 5.5.3
+  assetPath: Assets/EVP5/Scripts/Ground Materials/TireMarksRenderer.cs
+  uploadId: 784610

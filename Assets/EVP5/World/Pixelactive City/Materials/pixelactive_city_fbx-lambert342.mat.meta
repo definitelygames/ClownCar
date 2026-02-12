@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: d37bf3e0b4ae4480bb52ff450ca55787
+labels:
+- car
+- vehicle
+- wheel
+- tire
+- physics
+- bus
+- truck
+- suspension
+- skidmark
+- pickup
+- carpaint
+- driving
+AssetOrigin:
+  serializedVersion: 1
+  productId: 403
+  packageName: Edy's Vehicle Physics
+  packageVersion: 5.5.3
+  assetPath: Assets/EVP5/World/Pixelactive City/Materials/pixelactive_city_fbx-lambert342.mat
+  uploadId: 784610

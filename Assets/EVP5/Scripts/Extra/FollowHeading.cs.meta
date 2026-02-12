@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: 103fe9c0000d8a74795b8b0117f66ba6
+timeCreated: 1506444423
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: -200
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 403
+  packageName: Edy's Vehicle Physics
+  packageVersion: 5.5.3
+  assetPath: Assets/EVP5/Scripts/Extra/FollowHeading.cs
+  uploadId: 784610

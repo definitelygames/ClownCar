@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: cebfda0e8ba854f6590302c740e8c216
+labels:
+- car
+- vehicle
+- wheel
+- tire
+- physics
+- bus
+- truck
+- suspension
+- skidmark
+- pickup
+- carpaint
+- driving
+AssetOrigin:
+  serializedVersion: 1
+  productId: 403
+  packageName: Edy's Vehicle Physics
+  packageVersion: 5.5.3
+  assetPath: Assets/EVP5/World/Pixelactive City/Materials/pixelactive_city_fbx-21_estruc_metal.mat
+  uploadId: 784610

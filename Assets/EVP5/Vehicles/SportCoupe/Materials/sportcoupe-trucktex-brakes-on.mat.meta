@@ -1,0 +1,28 @@
+fileFormatVersion: 2
+guid: cf2165b8c0c410449aa0bc0d325c65eb
+labels:
+- car
+- vehicle
+- wheel
+- tire
+- physics
+- bus
+- truck
+- suspension
+- skidmark
+- pickup
+- carpaint
+- driving
+timeCreated: 1465560447
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 403
+  packageName: Edy's Vehicle Physics
+  packageVersion: 5.5.3
+  assetPath: Assets/EVP5/Vehicles/SportCoupe/Materials/sportcoupe-trucktex-brakes-on.mat
+  uploadId: 784610

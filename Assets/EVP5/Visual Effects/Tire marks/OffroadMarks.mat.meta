@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 6d08d79891cf83a43ba93914bb34dd31
+timeCreated: 1436136500
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 403
+  packageName: Edy's Vehicle Physics
+  packageVersion: 5.5.3
+  assetPath: Assets/EVP5/Visual Effects/Tire marks/OffroadMarks.mat
+  uploadId: 784610

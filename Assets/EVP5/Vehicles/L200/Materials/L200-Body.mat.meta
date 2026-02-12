@@ -1,0 +1,12 @@
+fileFormatVersion: 2
+guid: b4334802e73e2d8489e96b57de28cd8d
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 403
+  packageName: Edy's Vehicle Physics
+  packageVersion: 5.5.3
+  assetPath: Assets/EVP5/Vehicles/L200/Materials/L200-Body.mat
+  uploadId: 784610

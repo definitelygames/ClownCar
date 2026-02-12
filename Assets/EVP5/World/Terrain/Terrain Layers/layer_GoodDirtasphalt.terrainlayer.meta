@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: bb51865866d4a224ca0dbada285169ea
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 8574412962073106934
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 403
+  packageName: Edy's Vehicle Physics
+  packageVersion: 5.5.3
+  assetPath: Assets/EVP5/World/Terrain/Terrain Layers/layer_GoodDirtasphalt.terrainlayer
+  uploadId: 784610

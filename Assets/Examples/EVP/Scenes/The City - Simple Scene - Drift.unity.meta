@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 74089268d6b28124db26b0c870e06dc8
+timeCreated: 1465263232
+licenseType: Store
+DefaultImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 403
+  packageName: Edy's Vehicle Physics
+  packageVersion: 5.5.3
+  assetPath: Assets/EVP5/Scenes/The City - Simple Scene - Drift.unity
+  uploadId: 784610

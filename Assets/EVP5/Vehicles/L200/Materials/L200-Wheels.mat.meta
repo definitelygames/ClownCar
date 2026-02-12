@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 3f671d11c20c3e7468e4f110ba98f013
+timeCreated: 1427831632
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 403
+  packageName: Edy's Vehicle Physics
+  packageVersion: 5.5.3
+  assetPath: Assets/EVP5/Vehicles/L200/Materials/L200-Wheels.mat
+  uploadId: 784610

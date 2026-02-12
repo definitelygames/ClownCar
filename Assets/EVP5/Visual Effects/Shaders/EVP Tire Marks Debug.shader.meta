@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 852eccf91ccdfc343a2acef4f2f2eea5
+timeCreated: 1435861208
+licenseType: Store
+ShaderImporter:
+  defaultTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 403
+  packageName: Edy's Vehicle Physics
+  packageVersion: 5.5.3
+  assetPath: Assets/EVP5/Visual Effects/Shaders/EVP Tire Marks Debug.shader
+  uploadId: 784610

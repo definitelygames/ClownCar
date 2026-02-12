@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: bbce6cd4aa7e4434a919568c41eebe46
+timeCreated: 1436143338
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 403
+  packageName: Edy's Vehicle Physics
+  packageVersion: 5.5.3
+  assetPath: Assets/EVP5/Visual Effects/Tire marks/SandMarks.mat
+  uploadId: 784610

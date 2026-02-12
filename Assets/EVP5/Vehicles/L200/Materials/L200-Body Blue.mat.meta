@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 8d4b033348cfb0347b310537bfbb66f1
+timeCreated: 1427655195
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 403
+  packageName: Edy's Vehicle Physics
+  packageVersion: 5.5.3
+  assetPath: Assets/EVP5/Vehicles/L200/Materials/L200-Body Blue.mat
+  uploadId: 784610

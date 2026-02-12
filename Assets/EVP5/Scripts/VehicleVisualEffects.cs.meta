@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: e716af2fc4e2ff443b55f2492761cd23
+timeCreated: 1452971461
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 403
+  packageName: Edy's Vehicle Physics
+  packageVersion: 5.5.3
+  assetPath: Assets/EVP5/Scripts/VehicleVisualEffects.cs
+  uploadId: 784610

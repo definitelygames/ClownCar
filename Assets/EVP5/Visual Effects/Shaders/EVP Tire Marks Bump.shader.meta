@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 1cdcb8b96b643194aa3c601dc09a58b1
+timeCreated: 1436139713
+licenseType: Store
+ShaderImporter:
+  defaultTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 403
+  packageName: Edy's Vehicle Physics
+  packageVersion: 5.5.3
+  assetPath: Assets/EVP5/Visual Effects/Shaders/EVP Tire Marks Bump.shader
+  uploadId: 784610

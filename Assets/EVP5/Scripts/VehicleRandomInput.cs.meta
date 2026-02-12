@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: 31750466e2cffc240bc1c1299a5bb0f6
+timeCreated: 1429528023
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 403
+  packageName: Edy's Vehicle Physics
+  packageVersion: 5.5.3
+  assetPath: Assets/EVP5/Scripts/VehicleRandomInput.cs
+  uploadId: 784610

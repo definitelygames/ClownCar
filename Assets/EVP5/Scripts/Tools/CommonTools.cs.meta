@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: a7f646181655ab34fb8fc1df6fb14aa3
+timeCreated: 1424297675
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 403
+  packageName: Edy's Vehicle Physics
+  packageVersion: 5.5.3
+  assetPath: Assets/EVP5/Scripts/Tools/CommonTools.cs
+  uploadId: 784610

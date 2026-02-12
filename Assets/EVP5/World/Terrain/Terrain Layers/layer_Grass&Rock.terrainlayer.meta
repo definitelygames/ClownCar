@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 38f763a84125a00488e60de03b182284
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 8574412962073106934
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 403
+  packageName: Edy's Vehicle Physics
+  packageVersion: 5.5.3
+  assetPath: Assets/EVP5/World/Terrain/Terrain Layers/layer_Grass&Rock.terrainlayer
+  uploadId: 784610

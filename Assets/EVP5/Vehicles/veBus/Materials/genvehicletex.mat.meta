@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: 57ba42106e41d714394afff4ee64fbeb
+labels:
+- car
+- vehicle
+- wheel
+- tire
+- physics
+- bus
+- truck
+- suspension
+- skidmark
+- pickup
+- carpaint
+- driving
+AssetOrigin:
+  serializedVersion: 1
+  productId: 403
+  packageName: Edy's Vehicle Physics
+  packageVersion: 5.5.3
+  assetPath: Assets/EVP5/Vehicles/veBus/Materials/genvehicletex.mat
+  uploadId: 784610
