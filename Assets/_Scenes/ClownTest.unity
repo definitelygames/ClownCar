@@ -187,6 +187,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 161992, guid: 4de40d0c080734af98dff3bec799d4e8, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1517304097}
+    - targetCorrespondingSourceObject: {fileID: 161992, guid: 4de40d0c080734af98dff3bec799d4e8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1517304099}
+    - targetCorrespondingSourceObject: {fileID: 161992, guid: 4de40d0c080734af98dff3bec799d4e8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1517304098}
   m_SourcePrefab: {fileID: 100100000, guid: 4de40d0c080734af98dff3bec799d4e8, type: 3}
 --- !u!1 &305380320
 GameObject:
@@ -529,6 +535,83 @@ MonoBehaviour:
   continuousForwardAndReverse: 1
   handbrakeOverridesThrottle: 0
   combineMode: 0
+  externalSteeringOverride: 0
+--- !u!114 &1517304098
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1251476896}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ecd59b83246f7491db55018af72a0126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EVP.MultiplayerSteeringUI
+  steeringManager: {fileID: 0}
+  show: 1
+  toggleKey: 117
+  wheelSize: 80
+  wheelSpacing: 20
+  bottomMargin: 30
+  maxRotationAngle: 90
+  player1Color: {r: 1, g: 0, b: 0, a: 1}
+  player2Color: {r: 0, g: 0, b: 1, a: 1}
+  player3Color: {r: 0, g: 1, b: 0, a: 1}
+  player4Color: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  disabledColor: {r: 0.3, g: 0.3, b: 0.3, a: 0.5}
+--- !u!114 &1517304099
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1251476896}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b60dba1926d5d4efdbdbc90250890775, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EVP.MultiplayerSteeringManager
+  vehicle: {fileID: 0}
+  vehicleInput: {fileID: 0}
+  combineMode: 0
+  player1ToggleKey: 49
+  player2ToggleKey: 50
+  player3ToggleKey: 51
+  player4ToggleKey: 52
+  players:
+  - playerIndex: 0
+    leftKey: 97
+    rightKey: 100
+    isEnabled: 1
+    rampUpSpeed: 3
+    rampDownSpeed: 5
+    currentSteer: 0
+    targetSteer: 0
+  - playerIndex: 0
+    leftKey: 97
+    rightKey: 100
+    isEnabled: 1
+    rampUpSpeed: 3
+    rampDownSpeed: 5
+    currentSteer: 0
+    targetSteer: 0
+  - playerIndex: 0
+    leftKey: 97
+    rightKey: 100
+    isEnabled: 1
+    rampUpSpeed: 3
+    rampDownSpeed: 5
+    currentSteer: 0
+    targetSteer: 0
+  - playerIndex: 0
+    leftKey: 97
+    rightKey: 100
+    isEnabled: 1
+    rampUpSpeed: 3
+    rampDownSpeed: 5
+    currentSteer: 0
+    targetSteer: 0
 --- !u!1 &1650922224
 GameObject:
   m_ObjectHideFlags: 0

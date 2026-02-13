@@ -29,6 +29,10 @@ namespace EVP
         [Tooltip("How to combine multiple simultaneous inputs for the same action.")]
         public InputCombineMode combineMode = InputCombineMode.TakeHighestMagnitude;
 
+        [Header("External Override")]
+        [Tooltip("When true, steering input is controlled externally (e.g., multiplayer steering).")]
+        public bool externalSteeringOverride = false;
+
         public enum InputCombineMode
         {
             TakeHighestMagnitude,  // Use whichever input has the largest absolute value
@@ -289,8 +293,9 @@ namespace EVP
         {
             if (target == null) return;
 
-            // Apply input to vehicle
-            target.steerInput = steerInput;
+            // Apply input to vehicle (skip steer if external override is active)
+            if (!externalSteeringOverride)
+                target.steerInput = steerInput;
             target.throttleInput = throttleInput;
             target.brakeInput = brakeInput;
             target.handbrakeInput = handbrakeInput;
