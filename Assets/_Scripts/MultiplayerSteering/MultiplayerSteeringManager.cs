@@ -214,11 +214,47 @@ namespace EVP
                 brake = Mathf.Max(brake, player.GetControlValue(VehicleControlAction.Brake));
             }
 
-            CombinedSteer = Mathf.Clamp(-steerLeft + steerRight, -1f, 1f);
-            CombinedThrottle = Mathf.Clamp01(accelerate);
-            CombinedBrake = Mathf.Clamp01(brake);
+            // Translate forward/reverse like VehicleStandardInput's continuousForwardAndReverse
+            float throttleInput = 0f;
+            float brakeInput = 0f;
+            float minSpeed = 0.1f;
+            float minInput = 0.1f;
 
-            // Apply to vehicle
+            if (vehicle.speed > minSpeed)
+            {
+                // Moving forward: accelerate = gas, brake = brake
+                throttleInput = accelerate;
+                brakeInput = brake;
+            }
+            else
+            {
+                if (brake > minInput)
+                {
+                    // Stopped/slow + brake held = reverse
+                    throttleInput = -brake;
+                    brakeInput = 0f;
+                }
+                else if (accelerate > minInput)
+                {
+                    if (vehicle.speed < -minSpeed)
+                    {
+                        // Moving backward + accelerate = brake to stop
+                        throttleInput = 0f;
+                        brakeInput = accelerate;
+                    }
+                    else
+                    {
+                        // Stopped + accelerate = go forward
+                        throttleInput = accelerate;
+                        brakeInput = 0f;
+                    }
+                }
+            }
+
+            CombinedSteer = Mathf.Clamp(-steerLeft + steerRight, -1f, 1f);
+            CombinedThrottle = throttleInput;
+            CombinedBrake = brakeInput;
+
             vehicle.steerInput = CombinedSteer;
             vehicle.throttleInput = CombinedThrottle;
             vehicle.brakeInput = CombinedBrake;
