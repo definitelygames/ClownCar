@@ -32,6 +32,10 @@ namespace EVP
         [Header("External Override")]
         [Tooltip("When true, steering input is controlled externally (e.g., multiplayer steering).")]
         public bool externalSteeringOverride = false;
+        [Tooltip("When true, throttle input is controlled externally.")]
+        public bool externalThrottleOverride = false;
+        [Tooltip("When true, brake input is controlled externally.")]
+        public bool externalBrakeOverride = false;
 
         public enum InputCombineMode
         {
@@ -293,11 +297,13 @@ namespace EVP
         {
             if (target == null) return;
 
-            // Apply input to vehicle (skip steer if external override is active)
+            // Apply input to vehicle (skip axes with external overrides)
             if (!externalSteeringOverride)
                 target.steerInput = steerInput;
-            target.throttleInput = throttleInput;
-            target.brakeInput = brakeInput;
+            if (!externalThrottleOverride)
+                target.throttleInput = throttleInput;
+            if (!externalBrakeOverride)
+                target.brakeInput = brakeInput;
             target.handbrakeInput = handbrakeInput;
 
             // Handle reset

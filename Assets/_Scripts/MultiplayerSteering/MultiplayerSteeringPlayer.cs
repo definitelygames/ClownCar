@@ -1,66 +1,90 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace EVP
 {
+    public enum VehicleControlAction { SteerLeft, SteerRight, Accelerate, Brake }
+
+    [System.Serializable]
+    public class ControlBinding
+    {
+        public VehicleControlAction action;
+        public KeyCode key;
+        [HideInInspector] public float currentValue; // 0-1, ramped
+        [HideInInspector] public float targetValue;  // 0 or 1, raw input
+    }
+
     /// <summary>
-    /// Per-player steering input state and analog ramping.
-    /// Handles binary input from keyboard and converts to smooth analog steering.
+    /// Per-player input state and analog ramping.
+    /// Each player has a pool of keys and a set of assigned controls determined at runtime.
     /// </summary>
     [System.Serializable]
     public class MultiplayerSteeringPlayer
     {
         [Header("Player Settings")]
         public int playerIndex;
-        public KeyCode leftKey = KeyCode.A;
-        public KeyCode rightKey = KeyCode.D;
         public bool isEnabled = true;
 
+        [Header("Key Pool")]
+        [Tooltip("4 keys mapped in order to assigned controls")]
+        public KeyCode[] availableKeys = new KeyCode[4];
+
         [Header("Analog Ramping")]
-        [Tooltip("How fast steering ramps up when key is held")]
+        [Tooltip("How fast input ramps up when key is held")]
         public float rampUpSpeed = 3.0f;
-        [Tooltip("How fast steering returns to center when key is released")]
+        [Tooltip("How fast input returns to zero when key is released")]
         public float rampDownSpeed = 5.0f;
 
-        // Current analog steering value (-1 to 1)
-        [HideInInspector]
-        public float currentSteer = 0f;
-
-        // Immediate binary input target (-1, 0, or 1)
-        [HideInInspector]
-        public float targetSteer = 0f;
+        [Header("Assigned Controls (set at runtime)")]
+        public List<ControlBinding> assignedControls = new List<ControlBinding>();
 
         /// <summary>
-        /// Read keyboard input and set target steer value.
+        /// Read keyboard input and set target values for all assigned controls.
         /// </summary>
         public void ReadInput()
         {
             if (!isEnabled)
             {
-                targetSteer = 0f;
+                foreach (var binding in assignedControls)
+                    binding.targetValue = 0f;
                 return;
             }
 
-            float left = Input.GetKey(leftKey) ? -1f : 0f;
-            float right = Input.GetKey(rightKey) ? 1f : 0f;
-            targetSteer = left + right;
+            foreach (var binding in assignedControls)
+            {
+                binding.targetValue = Input.GetKey(binding.key) ? 1f : 0f;
+            }
         }
 
         /// <summary>
-        /// Update analog ramping using MoveTowards for smooth transitions.
-        /// Call this in Update or FixedUpdate.
+        /// Update analog ramping for all assigned controls.
         /// </summary>
         public void UpdateRamping(float deltaTime)
         {
-            if (!isEnabled)
+            foreach (var binding in assignedControls)
             {
-                // When disabled, quickly return to center
-                currentSteer = Mathf.MoveTowards(currentSteer, 0f, rampDownSpeed * deltaTime);
-                return;
-            }
+                if (!isEnabled)
+                {
+                    binding.currentValue = Mathf.MoveTowards(binding.currentValue, 0f, rampDownSpeed * deltaTime);
+                    continue;
+                }
 
-            // Use rampUpSpeed when moving toward target, rampDownSpeed when returning to center
-            float speed = Mathf.Abs(targetSteer) > 0.01f ? rampUpSpeed : rampDownSpeed;
-            currentSteer = Mathf.MoveTowards(currentSteer, targetSteer, speed * deltaTime);
+                float speed = binding.targetValue > 0.01f ? rampUpSpeed : rampDownSpeed;
+                binding.currentValue = Mathf.MoveTowards(binding.currentValue, binding.targetValue, speed * deltaTime);
+            }
+        }
+
+        /// <summary>
+        /// Get the current ramped value for a specific action (0 if not assigned).
+        /// </summary>
+        public float GetControlValue(VehicleControlAction action)
+        {
+            foreach (var binding in assignedControls)
+            {
+                if (binding.action == action)
+                    return binding.currentValue;
+            }
+            return 0f;
         }
 
         /// <summary>
@@ -72,12 +96,15 @@ namespace EVP
         }
 
         /// <summary>
-        /// Reset steering to center position.
+        /// Reset all control values to zero.
         /// </summary>
         public void Reset()
         {
-            currentSteer = 0f;
-            targetSteer = 0f;
+            foreach (var binding in assignedControls)
+            {
+                binding.currentValue = 0f;
+                binding.targetValue = 0f;
+            }
         }
     }
 }

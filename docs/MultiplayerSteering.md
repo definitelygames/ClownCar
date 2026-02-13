@@ -1,198 +1,98 @@
-# Multiplayer Steering System
+# Multiplayer Control System
 
-A system that allows 1-4 players to simultaneously steer the same vehicle using dedicated keyboard keys, with onscreen steering wheel indicators.
+A party-game system that splits vehicle control into 4 discrete single-button actions randomly distributed among 1-4 players. Players must cooperate, each only controlling a piece of the vehicle.
 
 ## Overview
 
-The multiplayer steering system enables chaotic cooperative (or competitive) vehicle control where multiple players share steering responsibility. Each player has their own analog steering input that gets combined into a single steering value applied to the vehicle.
+The system takes 4 vehicle actions (steer left, steer right, accelerate, brake) and randomly deals them to active players. With 1 player, they get all 4 actions. With 4 players, each gets exactly 1 action. Toggling players on/off triggers a reshuffle.
+
+## Actions
+
+| Action | Effect |
+|--------|--------|
+| **SteerLeft** | Steers the vehicle left (0 to -1) |
+| **SteerRight** | Steers the vehicle right (0 to +1) |
+| **Accelerate** | Throttle input (0 to 1) |
+| **Brake** | Brake input (0 to 1) |
+
+## Control Distribution
+
+When players are toggled, all 4 actions are shuffled (Fisher-Yates) and dealt round-robin:
+
+| Players | Distribution |
+|---------|-------------|
+| 1 | 4 controls |
+| 2 | 2 each |
+| 3 | 2+1+1 |
+| 4 | 1 each |
+
+Each assigned action maps to the next available key from the player's key pool.
+
+## Default Key Pools
+
+| Player | Key 1 | Key 2 | Key 3 | Key 4 | Default State |
+|--------|-------|-------|-------|-------|---------------|
+| P1 | A | D | W | S | Enabled |
+| P2 | Left | Right | Up | Down | Disabled |
+| P3 | J | L | I | K | Disabled |
+| P4 | Num4 | Num6 | Num8 | Num5 | Disabled |
+
+Keys are assigned in pool order to the player's controls. For example, if P1 receives SteerRight and Brake, they'd use A for SteerRight and D for Brake.
 
 ## Components
 
 ### MultiplayerSteeringPlayer
 
-A serializable data class that handles per-player input state and analog ramping.
+Per-player input state. Holds the key pool, assigned controls, and analog ramping parameters.
 
 **Location:** `Assets/_Scripts/MultiplayerSteering/MultiplayerSteeringPlayer.cs`
 
-**Properties:**
-
-| Property | Type | Default | Description |
-|----------|------|---------|-------------|
-| `playerIndex` | int | - | Player number (0-3) |
-| `leftKey` | KeyCode | varies | Key to steer left |
-| `rightKey` | KeyCode | varies | Key to steer right |
-| `isEnabled` | bool | varies | Whether this player is active |
-| `rampUpSpeed` | float | 3.0 | Speed at which steering ramps up when key is held |
-| `rampDownSpeed` | float | 5.0 | Speed at which steering returns to center |
-| `currentSteer` | float | 0 | Current analog steering value (-1 to 1) |
-| `targetSteer` | float | 0 | Immediate binary input target |
-
-**Analog Ramping:**
-
-The system converts binary keyboard input to smooth analog steering using `Mathf.MoveTowards`:
-- **Tap** = small turn (quick press releases before reaching full deflection)
-- **Hold** = full turn (ramps to -1 or +1 over time)
-- **Release** = smooth return to center (faster than ramp-up for responsive feel)
-
----
+**Key types:**
+- `VehicleControlAction` enum: `SteerLeft`, `SteerRight`, `Accelerate`, `Brake`
+- `ControlBinding`: maps an action to a key with ramped `currentValue`
 
 ### MultiplayerSteeringManager
 
-The main controller that combines all player inputs and applies them to the vehicle.
+Main controller. Distributes controls, reads input, combines values, applies to vehicle.
 
 **Location:** `Assets/_Scripts/MultiplayerSteering/MultiplayerSteeringManager.cs`
 
-**Inspector Properties:**
-
-| Property | Type | Description |
-|----------|------|-------------|
-| `vehicle` | VehicleController | Target vehicle (auto-detected if null) |
-| `vehicleInput` | VehicleNewInput | Input component to override (auto-detected if null) |
-| `combineMode` | CombineMode | How to combine multiple inputs |
-| `player1-4ToggleKey` | KeyCode | Keys to toggle each player (default: 1-4) |
-| `players` | MultiplayerSteeringPlayer[] | Array of 4 player configurations |
-
-**Combine Modes:**
-
-| Mode | Behavior | Use Case |
-|------|----------|----------|
-| **Average** | Sum / enabled player count | Balanced, predictable steering |
-| **Sum** | All inputs added, clamped to [-1, 1] | Chaotic, encourages cooperation/competition |
-
-**Default Key Bindings:**
-
-| Player | Left Key | Right Key | Default State |
-|--------|----------|-----------|---------------|
-| P1 | A | D | Enabled |
-| P2 | LeftArrow | RightArrow | Disabled |
-| P3 | J | K | Disabled |
-| P4 | O | P | Disabled |
-
-**Runtime Toggle:**
-Press number keys 1-4 to toggle each player on/off during gameplay.
-
----
+**Properties:**
+- `CombinedSteer` — net steering (-1 to 1)
+- `CombinedThrottle` — throttle (0 to 1)
+- `CombinedBrake` — brake (0 to 1)
 
 ### MultiplayerSteeringUI
 
-OnGUI-based display showing steering wheel indicators for each player.
+OnGUI display showing per-player control panels with key assignments and fill indicators, plus combined steer/throttle/brake bars.
 
 **Location:** `Assets/_Scripts/MultiplayerSteering/MultiplayerSteeringUI.cs`
 
-**Inspector Properties:**
+## Setup
 
-| Property | Type | Default | Description |
-|----------|------|---------|-------------|
-| `steeringManager` | MultiplayerSteeringManager | - | Manager reference (auto-detected) |
-| `show` | bool | true | Whether UI is visible |
-| `toggleKey` | KeyCode | U | Key to toggle visibility |
-| `wheelSize` | float | 80 | Size of each wheel indicator |
-| `wheelSpacing` | float | 20 | Gap between wheels |
-| `bottomMargin` | float | 30 | Distance from screen bottom |
-| `maxRotationAngle` | float | 90 | Maximum wheel rotation in degrees |
-| `player1-4Color` | Color | R/B/G/Y | Color for each player's wheel |
-| `disabledColor` | Color | gray | Color for disabled players |
-
-**UI Elements:**
-- Horizontal row of 4 steering wheel indicators at screen bottom
-- Each wheel rotates based on player's `currentSteer` value
-- Player labels show "P1 [ON]" or "P2 [OFF]" status
-- Combined steering indicator bar at panel bottom
-- Title text: "Multiplayer Steering (Press 1-4 to toggle)"
-
----
-
-## Setup Instructions
-
-1. **Add Components to Vehicle:**
-   - Select your vehicle GameObject in the Hierarchy
-   - Add Component > `MultiplayerSteeringManager`
-   - Add Component > `MultiplayerSteeringUI`
-
-2. **Configure (Optional):**
-   - Adjust key bindings in the Inspector
-   - Choose combine mode (Average or Sum)
-   - Customize UI colors and sizing
-
-3. **Play:**
-   - P1 starts enabled with A/D keys
-   - Press 2, 3, or 4 to enable additional players
-   - Press U to toggle the UI display
-
----
-
-## How It Works
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│                    Update() Loop                            │
-├─────────────────────────────────────────────────────────────┤
-│  1. Handle player toggle keys (1-4)                         │
-│  2. Each player reads keyboard input → targetSteer          │
-└─────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────────┐
-│                  FixedUpdate() Loop                         │
-├─────────────────────────────────────────────────────────────┤
-│  1. Each player: MoveTowards(currentSteer, targetSteer)     │
-│  2. Combine all enabled players' currentSteer values        │
-│  3. Apply combined value to VehicleController.steerInput    │
-└─────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────────┐
-│                     OnGUI() Loop                            │
-├─────────────────────────────────────────────────────────────┤
-│  1. Draw background panel                                   │
-│  2. Draw each player's rotated steering wheel               │
-│  3. Draw combined steering indicator                        │
-└─────────────────────────────────────────────────────────────┘
-```
-
----
+1. Add `MultiplayerSteeringManager` and `MultiplayerSteeringUI` to your vehicle GameObject
+2. Play — P1 starts with all 4 controls on WASD
+3. Press 2, 3, or 4 to enable additional players and redistribute
+4. Press U to toggle UI visibility
 
 ## Integration with VehicleNewInput
 
-The `MultiplayerSteeringManager` sets `VehicleNewInput.externalSteeringOverride = true` when enabled. This prevents the normal input system from overwriting the multiplayer steering value.
+The manager sets `externalSteeringOverride`, `externalThrottleOverride`, and `externalBrakeOverride` on `VehicleNewInput` when enabled. This prevents the normal input system from overwriting multiplayer-controlled values. All three overrides are cleared when the manager is disabled.
 
-When `MultiplayerSteeringManager` is disabled, it automatically clears the override flag, restoring normal single-player steering.
-
----
-
-## API Reference
-
-### MultiplayerSteeringManager
+## API
 
 ```csharp
-// Get combined steering value
+// Redistribute controls (called automatically on player toggle)
+steeringManager.DistributeControls();
+
+// Get combined values
 float steer = steeringManager.CombinedSteer;
+float throttle = steeringManager.CombinedThrottle;
+float brake = steeringManager.CombinedBrake;
 
-// Get number of active players
-int count = steeringManager.GetEnabledPlayerCount();
+// Enable/disable player programmatically (auto-redistributes)
+steeringManager.SetPlayerEnabled(1, true);
 
-// Enable/disable a player programmatically
-steeringManager.SetPlayerEnabled(1, true);  // Enable player 2
+// Get a player's current value for a specific action
+float val = player.GetControlValue(VehicleControlAction.Accelerate);
 ```
-
-### MultiplayerSteeringPlayer
-
-```csharp
-// Toggle player on/off
-player.Toggle();
-
-// Reset steering to center
-player.Reset();
-
-// Check if steering left or right
-bool isSteeringLeft = player.currentSteer < -0.1f;
-```
-
----
-
-## Customization Ideas
-
-- **Different vehicle actions:** Extend the system to share throttle/brake control
-- **Weighted players:** Give certain players more steering influence
-- **Input deadzone:** Add minimum threshold before steering registers
-- **Network multiplayer:** Replace keyboard input with networked player inputs

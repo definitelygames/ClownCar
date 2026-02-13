@@ -1,10 +1,12 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace EVP
 {
     /// <summary>
-    /// Main controller for multiplayer steering.
-    /// Combines input from all enabled players and applies to vehicle.
+    /// Main controller for multiplayer vehicle control.
+    /// Randomly distributes 4 discrete actions (steer left, steer right, accelerate, brake)
+    /// among active players. Each player only controls a subset of actions.
     /// </summary>
     public class MultiplayerSteeringManager : MonoBehaviour
     {
@@ -13,18 +15,8 @@ namespace EVP
         public VehicleController vehicle;
 
         [Header("Input Override")]
-        [Tooltip("Reference to VehicleNewInput to disable its steering when this is active.")]
+        [Tooltip("Reference to VehicleNewInput to disable its inputs when this is active.")]
         public VehicleNewInput vehicleInput;
-
-        [Header("Combine Mode")]
-        [Tooltip("How to combine multiple player inputs")]
-        public CombineMode combineMode = CombineMode.Average;
-
-        public enum CombineMode
-        {
-            Average,  // Sum of all steering / number of enabled players (balanced, predictable)
-            Sum       // All inputs add together, clamped to -1,1 (chaotic, encourages cooperation)
-        }
 
         [Header("Player Toggle Keys")]
         [Tooltip("Keys to toggle players on/off (1-4)")]
@@ -36,12 +28,13 @@ namespace EVP
         [Header("Players")]
         public MultiplayerSteeringPlayer[] players = new MultiplayerSteeringPlayer[4];
 
-        // Public property to get combined steering value
+        // Public properties for combined values
         public float CombinedSteer { get; private set; }
+        public float CombinedThrottle { get; private set; }
+        public float CombinedBrake { get; private set; }
 
         void Awake()
         {
-            // Initialize players with default key bindings if not set up
             if (players == null || players.Length == 0)
             {
                 InitializeDefaultPlayers();
@@ -50,40 +43,48 @@ namespace EVP
 
         void OnEnable()
         {
-            // Find vehicle controller if not assigned
             if (vehicle == null)
                 vehicle = GetComponent<VehicleController>();
 
-            // Find vehicle input if not assigned
             if (vehicleInput == null)
                 vehicleInput = GetComponent<VehicleNewInput>();
 
-            // Enable steering override on VehicleNewInput
             if (vehicleInput != null)
+            {
                 vehicleInput.externalSteeringOverride = true;
+                vehicleInput.externalThrottleOverride = true;
+                vehicleInput.externalBrakeOverride = true;
+            }
+
+            DistributeControls();
         }
 
         void OnDisable()
         {
-            // Disable steering override when this component is disabled
             if (vehicleInput != null)
+            {
                 vehicleInput.externalSteeringOverride = false;
+                vehicleInput.externalThrottleOverride = false;
+                vehicleInput.externalBrakeOverride = false;
+            }
 
-            // Reset vehicle steering
             if (vehicle != null)
+            {
                 vehicle.steerInput = 0f;
+                vehicle.throttleInput = 0f;
+                vehicle.brakeInput = 0f;
+            }
         }
 
         void InitializeDefaultPlayers()
         {
             players = new MultiplayerSteeringPlayer[4];
 
-            // Player 1: A/D (enabled by default)
+            // Player 1: A, D, W, S (enabled by default)
             players[0] = new MultiplayerSteeringPlayer
             {
                 playerIndex = 0,
-                leftKey = KeyCode.A,
-                rightKey = KeyCode.D,
+                availableKeys = new[] { KeyCode.A, KeyCode.D, KeyCode.W, KeyCode.S },
                 isEnabled = true
             };
 
@@ -91,36 +92,95 @@ namespace EVP
             players[1] = new MultiplayerSteeringPlayer
             {
                 playerIndex = 1,
-                leftKey = KeyCode.LeftArrow,
-                rightKey = KeyCode.RightArrow,
+                availableKeys = new[] { KeyCode.LeftArrow, KeyCode.RightArrow, KeyCode.UpArrow, KeyCode.DownArrow },
                 isEnabled = false
             };
 
-            // Player 3: J/K (disabled by default)
+            // Player 3: J, L, I, K (disabled by default)
             players[2] = new MultiplayerSteeringPlayer
             {
                 playerIndex = 2,
-                leftKey = KeyCode.J,
-                rightKey = KeyCode.K,
+                availableKeys = new[] { KeyCode.J, KeyCode.L, KeyCode.I, KeyCode.K },
                 isEnabled = false
             };
 
-            // Player 4: O/P (disabled by default)
+            // Player 4: Numpad 4, 6, 8, 5 (disabled by default)
             players[3] = new MultiplayerSteeringPlayer
             {
                 playerIndex = 3,
-                leftKey = KeyCode.O,
-                rightKey = KeyCode.P,
+                availableKeys = new[] { KeyCode.Keypad4, KeyCode.Keypad6, KeyCode.Keypad8, KeyCode.Keypad5 },
                 isEnabled = false
             };
         }
 
+        /// <summary>
+        /// Randomly distribute the 4 vehicle actions among enabled players.
+        /// Uses Fisher-Yates shuffle then round-robin dealing.
+        /// </summary>
+        public void DistributeControls()
+        {
+            // Clear all player assignments
+            foreach (var player in players)
+            {
+                if (player != null)
+                    player.assignedControls.Clear();
+            }
+
+            // Collect enabled players
+            var enabledPlayers = new List<MultiplayerSteeringPlayer>();
+            foreach (var player in players)
+            {
+                if (player != null && player.isEnabled)
+                    enabledPlayers.Add(player);
+            }
+
+            if (enabledPlayers.Count == 0) return;
+
+            // Create and shuffle the 4 actions (Fisher-Yates)
+            var actions = new VehicleControlAction[]
+            {
+                VehicleControlAction.SteerLeft,
+                VehicleControlAction.SteerRight,
+                VehicleControlAction.Accelerate,
+                VehicleControlAction.Brake
+            };
+
+            for (int i = actions.Length - 1; i > 0; i--)
+            {
+                int j = Random.Range(0, i + 1);
+                var temp = actions[i];
+                actions[i] = actions[j];
+                actions[j] = temp;
+            }
+
+            // Track how many keys each player has used
+            var keyIndices = new Dictionary<MultiplayerSteeringPlayer, int>();
+            foreach (var player in enabledPlayers)
+                keyIndices[player] = 0;
+
+            // Deal round-robin to enabled players
+            for (int i = 0; i < actions.Length; i++)
+            {
+                var player = enabledPlayers[i % enabledPlayers.Count];
+                int keyIdx = keyIndices[player];
+
+                var binding = new ControlBinding
+                {
+                    action = actions[i],
+                    key = player.availableKeys[keyIdx],
+                    currentValue = 0f,
+                    targetValue = 0f
+                };
+
+                player.assignedControls.Add(binding);
+                keyIndices[player] = keyIdx + 1;
+            }
+        }
+
         void Update()
         {
-            // Handle player toggle keys
             HandlePlayerToggles();
 
-            // Read input from all players
             foreach (var player in players)
             {
                 if (player != null)
@@ -139,56 +199,61 @@ namespace EVP
                     player.UpdateRamping(Time.fixedDeltaTime);
             }
 
-            // Combine all player inputs
-            CombinedSteer = CombinePlayerInputs();
+            // Gather control values from all players
+            float steerLeft = 0f;
+            float steerRight = 0f;
+            float accelerate = 0f;
+            float brake = 0f;
+
+            foreach (var player in players)
+            {
+                if (player == null) continue;
+                steerLeft = Mathf.Max(steerLeft, player.GetControlValue(VehicleControlAction.SteerLeft));
+                steerRight = Mathf.Max(steerRight, player.GetControlValue(VehicleControlAction.SteerRight));
+                accelerate = Mathf.Max(accelerate, player.GetControlValue(VehicleControlAction.Accelerate));
+                brake = Mathf.Max(brake, player.GetControlValue(VehicleControlAction.Brake));
+            }
+
+            CombinedSteer = Mathf.Clamp(-steerLeft + steerRight, -1f, 1f);
+            CombinedThrottle = Mathf.Clamp01(accelerate);
+            CombinedBrake = Mathf.Clamp01(brake);
 
             // Apply to vehicle
             vehicle.steerInput = CombinedSteer;
+            vehicle.throttleInput = CombinedThrottle;
+            vehicle.brakeInput = CombinedBrake;
         }
 
         void HandlePlayerToggles()
         {
+            bool changed = false;
+
             if (Input.GetKeyDown(player1ToggleKey) && players.Length > 0 && players[0] != null)
+            {
                 players[0].Toggle();
+                changed = true;
+            }
 
             if (Input.GetKeyDown(player2ToggleKey) && players.Length > 1 && players[1] != null)
+            {
                 players[1].Toggle();
+                changed = true;
+            }
 
             if (Input.GetKeyDown(player3ToggleKey) && players.Length > 2 && players[2] != null)
+            {
                 players[2].Toggle();
+                changed = true;
+            }
 
             if (Input.GetKeyDown(player4ToggleKey) && players.Length > 3 && players[3] != null)
+            {
                 players[3].Toggle();
-        }
-
-        float CombinePlayerInputs()
-        {
-            float sum = 0f;
-            int enabledCount = 0;
-
-            foreach (var player in players)
-            {
-                if (player != null && player.isEnabled)
-                {
-                    sum += player.currentSteer;
-                    enabledCount++;
-                }
+                changed = true;
             }
 
-            if (enabledCount == 0)
-                return 0f;
-
-            switch (combineMode)
-            {
-                case CombineMode.Average:
-                    return Mathf.Clamp(sum / enabledCount, -1f, 1f);
-
-                case CombineMode.Sum:
-                    return Mathf.Clamp(sum, -1f, 1f);
-
-                default:
-                    return Mathf.Clamp(sum / enabledCount, -1f, 1f);
-            }
+            if (changed)
+                DistributeControls();
         }
 
         /// <summary>
@@ -207,12 +272,14 @@ namespace EVP
 
         /// <summary>
         /// Enable or disable a specific player by index (0-3).
+        /// Redistributes controls after change.
         /// </summary>
         public void SetPlayerEnabled(int index, bool enabled)
         {
             if (index >= 0 && index < players.Length && players[index] != null)
             {
                 players[index].isEnabled = enabled;
+                DistributeControls();
             }
         }
     }
