@@ -37,8 +37,10 @@ namespace EVP
         public float steeringMultiplier = 1.0f;
 
         [Header("Lean Physics")]
-        [Tooltip("Roll torque applied when players lean. At full lean with all players, the car should tip over.")]
-        public float leanTorque = 5000f;
+        [Tooltip("Left/right roll torque. At full lean with all players, the car should tip over.")]
+        public float leanTorqueLateral = 5000f;
+        [Tooltip("Forward/back pitch torque. Positive lean (forward) shifts weight to the front.")]
+        public float leanTorqueLongitudinal = 3000f;
 
         [Header("Keyboard Movement")]
         [Tooltip("How fast keyboard moves dot (normalized units/sec).")]
@@ -121,6 +123,7 @@ namespace EVP
 
             float combinedSteer = 0f;
             float combinedLeanX = 0f;
+            float combinedLeanY = 0f;
             int enabledCount = 0;
             foreach (var player in players)
             {
@@ -128,6 +131,7 @@ namespace EVP
                 {
                     combinedSteer += player.dotPosition.x * steeringMultiplier;
                     combinedLeanX += player.dotPosition.x;
+                    combinedLeanY += player.dotPosition.y;
                     enabledCount++;
                 }
             }
@@ -136,14 +140,20 @@ namespace EVP
             {
                 combinedSteer /= enabledCount;
                 combinedLeanX /= enabledCount;
+                combinedLeanY /= enabledCount;
             }
 
             vehicle.steerInput = Mathf.Clamp(combinedSteer, -1f, 1f);
 
-            // Apply roll torque along the vehicle's forward axis to simulate weight shift
+            // Apply torques to simulate weight shift
             Rigidbody rb = vehicle.cachedRigidbody;
             if (rb != null)
-                rb.AddTorque(rb.transform.forward * combinedLeanX * -leanTorque, ForceMode.Force);
+            {
+                // Roll torque (left/right lean around forward axis)
+                rb.AddTorque(rb.transform.forward * combinedLeanX * -leanTorqueLateral, ForceMode.Force);
+                // Pitch torque (forward/back lean around right axis)
+                rb.AddTorque(rb.transform.right * combinedLeanY * leanTorqueLongitudinal, ForceMode.Force);
+            }
         }
 
         void HandleToggleKeys()
