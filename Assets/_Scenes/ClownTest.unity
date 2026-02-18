@@ -653,6 +653,7 @@ MonoBehaviour:
   vehicle: {fileID: 1517304089}
   vehicleInput: {fileID: 1517304097}
   steeringMultiplier: 1
+  leanTorque: 7000
   keyboardMoveSpeed: 2
   keyboardReturnSpeed: 3
   players:

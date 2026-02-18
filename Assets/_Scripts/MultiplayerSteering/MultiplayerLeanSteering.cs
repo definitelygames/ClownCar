@@ -36,6 +36,10 @@ namespace EVP
         [Tooltip("Multiplier per player's steering contribution.")]
         public float steeringMultiplier = 1.0f;
 
+        [Header("Lean Physics")]
+        [Tooltip("Roll torque applied when players lean. At full lean with all players, the car should tip over.")]
+        public float leanTorque = 5000f;
+
         [Header("Keyboard Movement")]
         [Tooltip("How fast keyboard moves dot (normalized units/sec).")]
         public float keyboardMoveSpeed = 2.0f;
@@ -116,20 +120,30 @@ namespace EVP
             if (vehicle == null) return;
 
             float combinedSteer = 0f;
+            float combinedLeanX = 0f;
             int enabledCount = 0;
             foreach (var player in players)
             {
                 if (player != null && player.isEnabled)
                 {
                     combinedSteer += player.dotPosition.x * steeringMultiplier;
+                    combinedLeanX += player.dotPosition.x;
                     enabledCount++;
                 }
             }
 
             if (enabledCount > 0)
+            {
                 combinedSteer /= enabledCount;
+                combinedLeanX /= enabledCount;
+            }
 
             vehicle.steerInput = Mathf.Clamp(combinedSteer, -1f, 1f);
+
+            // Apply roll torque along the vehicle's forward axis to simulate weight shift
+            Rigidbody rb = vehicle.cachedRigidbody;
+            if (rb != null)
+                rb.AddTorque(rb.transform.forward * combinedLeanX * -leanTorque, ForceMode.Force);
         }
 
         void HandleToggleKeys()
