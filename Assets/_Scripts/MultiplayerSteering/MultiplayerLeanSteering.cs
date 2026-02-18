@@ -33,10 +33,14 @@ namespace EVP
         public VehicleNewInput vehicleInput;
 
         [Header("Steering Settings")]
+        [Tooltip("Whether left/right lean controls vehicle steering.")]
+        public bool leanAffectsSteering = true;
         [Tooltip("Multiplier per player's steering contribution.")]
         public float steeringMultiplier = 1.0f;
 
         [Header("Lean Physics")]
+        [Tooltip("Whether left/right lean applies roll torque to the vehicle.")]
+        public bool leanAffectsLateralTorque = true;
         [Tooltip("Left/right roll torque. At full lean with all players, the car should tip over.")]
         public float leanTorqueLateral = 5000f;
         [Tooltip("Forward/back pitch torque. Positive lean (forward) shifts weight to the front.")]
@@ -143,14 +147,15 @@ namespace EVP
                 combinedLeanY /= enabledCount;
             }
 
-            vehicle.steerInput = Mathf.Clamp(combinedSteer, -1f, 1f);
+            if (leanAffectsSteering)
+                vehicle.steerInput = Mathf.Clamp(combinedSteer, -1f, 1f);
 
             // Apply torques to simulate weight shift
             Rigidbody rb = vehicle.cachedRigidbody;
             if (rb != null)
             {
-                // Roll torque (left/right lean around forward axis)
-                rb.AddTorque(rb.transform.forward * combinedLeanX * -leanTorqueLateral, ForceMode.Force);
+                if (leanAffectsLateralTorque)
+                    rb.AddTorque(rb.transform.forward * combinedLeanX * -leanTorqueLateral, ForceMode.Force);
                 // Pitch torque (forward/back lean around right axis)
                 rb.AddTorque(rb.transform.right * combinedLeanY * leanTorqueLongitudinal, ForceMode.Force);
             }
