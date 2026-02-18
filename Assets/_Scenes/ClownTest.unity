@@ -239,6 +239,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 161992, guid: 4de40d0c080734af98dff3bec799d4e8, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1517304098}
+    - targetCorrespondingSourceObject: {fileID: 161992, guid: 4de40d0c080734af98dff3bec799d4e8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1517304101}
   m_SourcePrefab: {fileID: 100100000, guid: 4de40d0c080734af98dff3bec799d4e8, type: 3}
 --- !u!1 &305380320
 GameObject:
@@ -571,7 +574,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1251476896}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e96f65d1c63124e1c8e6ac0973593a16, type: 3}
   m_Name: 
@@ -591,7 +594,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1251476896}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ecd59b83246f7491db55018af72a0126, type: 3}
   m_Name: 
@@ -611,7 +614,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1251476896}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b60dba1926d5d4efdbdbc90250890775, type: 3}
   m_Name: 
@@ -635,6 +638,47 @@ MonoBehaviour:
     rampUpSpeed: 3
     rampDownSpeed: 5
     assignedControls: []
+--- !u!114 &1517304101
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1251476896}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d4907d91f4784095b656bed26e08621, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EVP.MultiplayerLeanSteering
+  vehicle: {fileID: 1517304089}
+  vehicleInput: {fileID: 1517304097}
+  steeringMultiplier: 1
+  keyboardMoveSpeed: 2
+  keyboardReturnSpeed: 3
+  players:
+  - isEnabled: 0
+    inputType: 0
+    dotPosition: {x: 0, y: 0}
+  - isEnabled: 0
+    inputType: 1
+    dotPosition: {x: 0, y: 0}
+  - isEnabled: 0
+    inputType: 2
+    dotPosition: {x: 0, y: 0}
+  - isEnabled: 0
+    inputType: 3
+    dotPosition: {x: 0, y: 0}
+  player1ToggleKey: 49
+  player2ToggleKey: 50
+  player3ToggleKey: 51
+  player4ToggleKey: 52
+  showUI: 1
+  uiToggleKey: 117
+  boxWidth: 120
+  boxHeight: 120
+  boxSpacing: 15
+  bottomMargin: 30
+  dotRadius: 6
 --- !u!1 &1650922224
 GameObject:
   m_ObjectHideFlags: 0
