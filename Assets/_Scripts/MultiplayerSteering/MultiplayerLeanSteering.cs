@@ -20,6 +20,8 @@ namespace EVP
         public bool isEnabled;
         public LeanInputType inputType;
         [HideInInspector] public Vector2 dotPosition; // normalized [-1, 1] on both axes
+        [HideInInspector] public float popTimeRemaining; // time left in pop window
+        [HideInInspector] public bool wasAtEdge; // for detecting edge transition
     }
 
     public class MultiplayerLeanSteering : MonoBehaviour
@@ -45,6 +47,17 @@ namespace EVP
         public float leanTorqueLateral = 5000f;
         [Tooltip("Forward/back pitch torque. Positive lean (forward) shifts weight to the front.")]
         public float leanTorqueLongitudinal = 3000f;
+
+        [Header("Pop")]
+        [Tooltip("How long (seconds) a player stays in the pop window after hitting the edge.")]
+        public float popWindow = 0.1f;
+        [Tooltip("Threshold for dot magnitude to count as 'at edge' (0-1).")]
+        public float popEdgeThreshold = 0.95f;
+        [Tooltip("Instantaneous impulse torque when all players pop together.")]
+        public float popForce = 10000f;
+
+        // Runtime pop state
+        private bool popFired;
 
         [Header("Keyboard Movement")]
         [Tooltip("How fast keyboard moves dot (normalized units/sec).")]
@@ -158,6 +171,62 @@ namespace EVP
                     rb.AddTorque(rb.transform.forward * combinedLeanX * -leanTorqueLateral, ForceMode.Force);
                 // Pitch torque (forward/back lean around right axis)
                 rb.AddTorque(rb.transform.right * combinedLeanY * leanTorqueLongitudinal, ForceMode.Force);
+
+                // Pop detection
+                UpdatePopWindows(rb, enabledCount);
+            }
+        }
+
+        void UpdatePopWindows(Rigidbody rb, int enabledCount)
+        {
+            if (enabledCount == 0) return;
+
+            float dt = Time.fixedDeltaTime;
+            bool allInPopWindow = true;
+            bool anyAtEdge = false;
+            Vector2 popDirection = Vector2.zero;
+
+            foreach (var player in players)
+            {
+                if (player == null || !player.isEnabled) continue;
+
+                bool atEdge = player.dotPosition.magnitude >= popEdgeThreshold;
+
+                // Start pop window on transition to edge
+                if (atEdge && !player.wasAtEdge)
+                    player.popTimeRemaining = popWindow;
+
+                player.wasAtEdge = atEdge;
+
+                // Count down pop timer
+                if (player.popTimeRemaining > 0f)
+                    player.popTimeRemaining -= dt;
+
+                bool inPopWindow = player.popTimeRemaining > 0f;
+                if (!inPopWindow)
+                    allInPopWindow = false;
+
+                if (atEdge)
+                    anyAtEdge = true;
+
+                popDirection += player.dotPosition;
+            }
+
+            popDirection /= enabledCount;
+
+            // Reset popFired when no one is at edge
+            if (!anyAtEdge)
+                popFired = false;
+
+            // Fire pop impulse when all enabled players are in their pop window simultaneously
+            if (allInPopWindow && !popFired)
+            {
+                popFired = true;
+                Vector2 dir = popDirection.normalized;
+                // Lateral (roll) impulse
+                rb.AddTorque(rb.transform.forward * dir.x * -popForce, ForceMode.Impulse);
+                // Longitudinal (pitch) impulse
+                rb.AddTorque(rb.transform.right * dir.y * popForce, ForceMode.Impulse);
             }
         }
 
