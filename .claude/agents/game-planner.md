@@ -31,7 +31,7 @@ Write to: `GAME_DESIGN.md` (in project root)
 ## Overview
 **Genre:** [e.g., Platformer, Shooter, Puzzle]
 **Perspective:** [Top-down, Side-view, First-person, Third-person]
-**Players:** Multiplayer (Normcore)
+**Players:** [Single-player / Multiplayer]
 **Target Feel:** [e.g., Fast-paced action, Relaxing exploration]
 
 ## Core Loop
@@ -107,8 +107,7 @@ Write to: `GAME_DESIGN.md` (in project root)
 - [ ] Final assets
 
 ## Technical Notes
-- Multiplayer: Normcore (assumed)
-- Prefabs in Resources/ for networking
+- Prefabs in Resources/ for runtime spawning
 ```
 
 ## Guidelines
@@ -117,7 +116,7 @@ Write to: `GAME_DESIGN.md` (in project root)
 2. **Be specific** - "Red cube enemy that chases player" not "some enemies"
 3. **Prioritize milestones** - What's needed to be playable first?
 4. **Identify assets early** - So asset-finder can work in parallel
-5. **Assume multiplayer** - Everything should work with Normcore
+5. **Ask about multiplayer** - Don't assume multiplayer unless requested
 
 ## Questions to Consider
 

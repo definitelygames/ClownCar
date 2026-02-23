@@ -107,15 +107,6 @@ if (myReference == null)
 4. For multiplayer: ownership check blocking?
 5. Time.timeScale = 0 (paused)?
 
-### Multiplayer Not Syncing
-**Symptom:** Other players don't see changes
-**Check:**
-1. RealtimeView on object?
-2. RealtimeTransform for position?
-3. Prefab in Resources/?
-4. Using Realtime.Instantiate()?
-5. Ownership correct?
-
 ## Investigation Commands
 
 ```
