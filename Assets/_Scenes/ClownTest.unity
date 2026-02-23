@@ -652,15 +652,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EVP.MultiplayerLeanSteering
   vehicle: {fileID: 1517304089}
   vehicleInput: {fileID: 1517304097}
-  steeringMultiplier: 1
-  leanTorque: 7000
+  leanAffectsSteering: 1
+  steeringMultiplier: 0.5
+  leanAffectsLateralTorque: 1
+  leanTorqueLateral: 10000
+  leanTorqueLongitudinal: 18000
   keyboardMoveSpeed: 2
   keyboardReturnSpeed: 3
   players:
-  - isEnabled: 0
+  - isEnabled: 1
     inputType: 0
     dotPosition: {x: 0, y: 0}
-  - isEnabled: 0
+  - isEnabled: 1
     inputType: 1
     dotPosition: {x: 0, y: 0}
   - isEnabled: 0

@@ -186,7 +186,7 @@
                 {
                     "name": "positive",
                     "id": "25437deb-7132-4293-8692-80fabba16b41",
-                    "path": "<Keyboard>/w",
+                    "path": "<Keyboard>/z",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard",
@@ -197,40 +197,7 @@
                 {
                     "name": "negative",
                     "id": "0bf5cb71-98ea-40b0-be92-2cc951c2b820",
-                    "path": "<Keyboard>/s",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Keyboard",
-                    "action": "Throttle",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "Keyboard Arrows",
-                    "id": "2f4f7875-d055-40d8-89d9-f56c78c68f7e",
-                    "path": "1DAxis",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Throttle",
-                    "isComposite": true,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "positive",
-                    "id": "489bb739-24eb-494c-bff1-c68d8f56f225",
-                    "path": "<Keyboard>/upArrow",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Keyboard",
-                    "action": "Throttle",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "negative",
-                    "id": "3608f628-fa58-41e0-8155-bad2e680de26",
-                    "path": "<Keyboard>/downArrow",
+                    "path": "<Keyboard>/x",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard",
