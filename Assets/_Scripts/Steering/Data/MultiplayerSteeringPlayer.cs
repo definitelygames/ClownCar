@@ -15,7 +15,7 @@ namespace EVP
     }
 
     /// <summary>
-    /// Per-player input state and analog ramping.
+    /// Per-player input state and analog ramping for discrete multiplayer steering.
     /// Each player has a pool of keys and a set of assigned controls determined at runtime.
     /// </summary>
     [System.Serializable]
@@ -38,9 +38,6 @@ namespace EVP
         [Header("Assigned Controls (set at runtime)")]
         public List<ControlBinding> assignedControls = new List<ControlBinding>();
 
-        /// <summary>
-        /// Read keyboard input and set target values for all assigned controls.
-        /// </summary>
         public void ReadInput()
         {
             if (!isEnabled)
@@ -51,14 +48,9 @@ namespace EVP
             }
 
             foreach (var binding in assignedControls)
-            {
                 binding.targetValue = Input.GetKey(binding.key) ? 1f : 0f;
-            }
         }
 
-        /// <summary>
-        /// Update analog ramping for all assigned controls.
-        /// </summary>
         public void UpdateRamping(float deltaTime)
         {
             foreach (var binding in assignedControls)
@@ -74,9 +66,6 @@ namespace EVP
             }
         }
 
-        /// <summary>
-        /// Get the current ramped value for a specific action (0 if not assigned).
-        /// </summary>
         public float GetControlValue(VehicleControlAction action)
         {
             foreach (var binding in assignedControls)
@@ -87,17 +76,11 @@ namespace EVP
             return 0f;
         }
 
-        /// <summary>
-        /// Toggle the enabled state of this player.
-        /// </summary>
         public void Toggle()
         {
             isEnabled = !isEnabled;
         }
 
-        /// <summary>
-        /// Reset all control values to zero.
-        /// </summary>
         public void Reset()
         {
             foreach (var binding in assignedControls)
@@ -106,5 +89,28 @@ namespace EVP
                 binding.targetValue = 0f;
             }
         }
+    }
+
+    // Lean steering data types (used by LeanMultiplayerSteering)
+
+    public enum LeanInputType
+    {
+        WASD,
+        ArrowKeys,
+        Gamepad1,
+        Gamepad2,
+        Gamepad3,
+        Gamepad4,
+        Mouse
+    }
+
+    [System.Serializable]
+    public class LeanPlayerData
+    {
+        public bool isEnabled;
+        public LeanInputType inputType;
+        [HideInInspector] public Vector2 dotPosition;
+        [HideInInspector] public float popTimeRemaining;
+        [HideInInspector] public bool wasAtEdge;
     }
 }
