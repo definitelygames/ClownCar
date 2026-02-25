@@ -698,6 +698,7 @@ MonoBehaviour:
   player4ToggleKey: 52
   uiToggleKey: 117
   nextModeKey: 109
+  externalUIManaged: 0
 --- !u!1 &2546303867577287833
 GameObject:
   m_ObjectHideFlags: 0
@@ -2214,6 +2215,7 @@ GameObject:
   - component: {fileID: 6225261166434467968}
   - component: {fileID: 1045864386116426471}
   - component: {fileID: 4842946504899725961}
+  - component: {fileID: 7293841056218374520}
   m_Layer: 0
   m_Name: DriverFrontPivot
   m_TagString: Untagged
@@ -2245,7 +2247,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8486483253475120149}
   serializedVersion: 5
-  m_Mass: 0.5
+  m_Mass: 10
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -2259,7 +2261,7 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 0
+  m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
@@ -2339,13 +2341,13 @@ ConfigurableJoint:
   m_RotationDriveMode: 0
   m_AngularXDrive:
     serializedVersion: 4
-    positionSpring: 50
+    positionSpring: 30
     positionDamper: 10
     maximumForce: 3.4028233e+38
     useAcceleration: 0
   m_AngularYZDrive:
     serializedVersion: 4
-    positionSpring: 100
+    positionSpring: 50
     positionDamper: 10
     maximumForce: 3.4028233e+38
     useAcceleration: 0
@@ -2366,6 +2368,28 @@ ConfigurableJoint:
   m_EnablePreprocessing: 1
   m_MassScale: 1
   m_ConnectedMassScale: 1
+--- !u!114 &7293841056218374520
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8486483253475120149}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8dc59f4bce3c246adacf2609a6881a3d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  avatarPrefab: {fileID: 0}
+  offset: {x: 0, y: 0.5, z: 0}
+  seatedAnimatorController: {fileID: 9100000, guid: f7e8d9c0b1a2e3f4d5c6b7a8e9f0d1c2, type: 2}
+  seated: 1
+  steeringWheel: {fileID: 1951135215909972676}
+  leftGripOffset: {x: -0.15, y: 0, z: 0}
+  rightGripOffset: {x: 0.15, y: 0, z: 0}
+  massOverride: 10
+  centerOfMassY: -0.3
+  vehicleRoot: {fileID: 0}
 --- !u!1 &8724612222226912752
 GameObject:
   m_ObjectHideFlags: 0
