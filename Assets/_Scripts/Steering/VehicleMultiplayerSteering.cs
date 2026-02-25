@@ -45,6 +45,9 @@ namespace EVP
         public float HandbrakeInput { get; private set; }
         public bool ShowUI { get; private set; } = true;
 
+        // When true, VehicleHUD manages all UI drawing and toggle input
+        [HideInInspector] public bool externalUIManaged = false;
+
         // Runtime
         private SteeringMethod[] methods;
         private SteeringMethod activeMethod;
@@ -134,8 +137,8 @@ namespace EVP
 
         void Update()
         {
-            // Universal: UI toggle
-            if (Input.GetKeyDown(uiToggleKey))
+            // Universal: UI toggle (skip when VehicleHUD manages UI)
+            if (!externalUIManaged && Input.GetKeyDown(uiToggleKey))
                 ShowUI = !ShowUI;
 
             // Universal: player toggles
@@ -192,7 +195,16 @@ namespace EVP
 
         void OnGUI()
         {
+            if (externalUIManaged) return;
             if (!ShowUI) return;
+            activeMethod?.DrawGUI();
+        }
+
+        /// <summary>
+        /// Draw the active steering method's GUI. Called by VehicleHUD's SteeringInputPanel.
+        /// </summary>
+        public void DrawActiveMethodGUI()
+        {
             activeMethod?.DrawGUI();
         }
 
