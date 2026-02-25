@@ -185,6 +185,11 @@ namespace EVP
             }
         }
 
+        void LateUpdate()
+        {
+            activeMethod?.LateUpdate();
+        }
+
         void OnGUI()
         {
             if (!ShowUI) return;

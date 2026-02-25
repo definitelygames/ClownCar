@@ -98,12 +98,15 @@ namespace EVP
                 vehicle.wheels[i].drive = originalDriveFlags[i];
             }
 
-            // Zero steer angles on the actual WheelColliders
+            // Zero steer angles on both WheelColliders and EVP visual data
             var wd = vehicle.wheelData;
             if (wd != null)
             {
                 for (int i = 0; i < wd.Length; i++)
+                {
                     wd[i].collider.steerAngle = 0f;
+                    wd[i].steerAngle = 0f;
+                }
             }
 
             if (uiTexture != null)
@@ -214,6 +217,7 @@ namespace EVP
                     float targetAngle = player.inputPosition.x * maxAngle;
                     wheelSteerAngles[wi] = targetAngle;
                     wd[wi].collider.steerAngle = targetAngle;
+                    wd[wi].steerAngle = targetAngle; // EVP reads this for visual wheel rotation
 
                     // 2. Drive force
                     float inputY = player.inputPosition.y;
@@ -252,8 +256,37 @@ namespace EVP
                     {
                         wheelSteerAngles[wi] = Mathf.MoveTowards(wheelSteerAngles[wi], 0f, config.centeringSpeed * fixedDeltaTime);
                         wd[wi].collider.steerAngle = wheelSteerAngles[wi];
+                        wd[wi].steerAngle = wheelSteerAngles[wi];
                     }
                     // No drive force for uncontrolled wheels
+                }
+            }
+        }
+
+        public override void LateUpdate()
+        {
+            // EVP's Update() calls UpdateSteering which resets wd.steerAngle to 0
+            // when wheel.steer is false, then UpdateTransform uses that for visuals.
+            // We re-apply our steer angles here after EVP is done.
+            var wd = vehicle.wheelData;
+            if (wd == null) return;
+
+            for (int wi = 0; wi < wd.Length && wi < wheelSteerAngles.Length; wi++)
+            {
+                wd[wi].steerAngle = wheelSteerAngles[wi];
+                wd[wi].collider.steerAngle = wheelSteerAngles[wi];
+
+                // Re-apply visual transform rotation with our steer angle
+                if (wd[wi].wheel.caliperTransform != null)
+                {
+                    wd[wi].wheel.caliperTransform.rotation = wd[wi].transform.rotation
+                        * Quaternion.Euler(0f, wheelSteerAngles[wi], 0f);
+                }
+
+                if (wd[wi].wheel.wheelTransform != null && !wd[wi].isWheelChildOfCaliper)
+                {
+                    wd[wi].wheel.wheelTransform.rotation = wd[wi].transform.rotation
+                        * Quaternion.Euler(wd[wi].angularPosition * Mathf.Rad2Deg, wheelSteerAngles[wi], 0f);
                 }
             }
         }

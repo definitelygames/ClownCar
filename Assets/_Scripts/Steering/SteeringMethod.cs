@@ -62,6 +62,11 @@ namespace EVP
         public virtual void ApplyPhysics(Rigidbody rb, float fixedDeltaTime) { }
 
         /// <summary>
+        /// Called every LateUpdate. Override visuals after EVP's Update has run.
+        /// </summary>
+        public virtual void LateUpdate() { }
+
+        /// <summary>
         /// Called every OnGUI. Draw method-specific UI here.
         /// </summary>
         public virtual void DrawGUI() { }
