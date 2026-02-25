@@ -39,12 +39,12 @@ public class SeatedAvatarManager : MonoBehaviour
         if (steering != null)
             steering.OnPlayerToggled -= HandlePlayerToggled;
 
-        // Despawn all
+        // Despawn all (skip ejected — ragdolls persist independently)
         if (seats != null)
         {
             foreach (var seat in seats)
             {
-                if (seat != null)
+                if (seat != null && !seat.IsEjected)
                     seat.DespawnAvatar();
             }
         }
@@ -57,7 +57,7 @@ public class SeatedAvatarManager : MonoBehaviour
 
         if (enabled)
             seats[index].SpawnAvatar();
-        else
+        else if (!seats[index].IsEjected)
             seats[index].DespawnAvatar();
     }
 }

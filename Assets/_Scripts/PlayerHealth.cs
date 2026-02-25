@@ -1,0 +1,144 @@
+using UnityEngine;
+using EVP;
+using FIMSpace.FProceduralAnimation;
+
+/// <summary>
+/// Per-player health tracking and ejection. Attach to a seat pivot alongside SeatedAvatar.
+/// When health reaches 0, the avatar is ejected as a ragdoll and steering is disabled.
+/// </summary>
+public class PlayerHealth : MonoBehaviour
+{
+    [Header("Health")]
+    public float maxHealth = 100f;
+
+    [Header("Player")]
+    [Tooltip("Which player slot (0-3). Must match the SeatedAvatarManager/steering index.")]
+    public int playerIndex;
+
+    [Header("Ejection Forces")]
+    public float ejectionUpForce = 8f;
+    public float ejectionRagdollForce = 5f;
+    public Vector2 ejectionXRange = new Vector2(-2f, 2f);
+    public Vector2 ejectionZRange = new Vector2(-2f, 2f);
+
+    float currentHealth;
+    SeatedAvatar seatedAvatar;
+    Rigidbody seatRigidbody;
+    ConfigurableJoint seatJoint;
+
+    public bool IsDead => currentHealth <= 0f;
+    public bool IsEjected { get; private set; }
+    public float HealthNormalized => maxHealth > 0f ? Mathf.Clamp01(currentHealth / maxHealth) : 0f;
+
+    public System.Action<PlayerHealth> OnDeath;
+
+    void Awake()
+    {
+        currentHealth = maxHealth;
+        seatedAvatar = GetComponent<SeatedAvatar>();
+        seatRigidbody = GetComponent<Rigidbody>();
+        seatJoint = GetComponent<ConfigurableJoint>();
+    }
+
+    public void TakeDamage(float amount)
+    {
+        if (IsDead || IsEjected) return;
+
+        currentHealth -= amount;
+
+        if (currentHealth <= 0f)
+        {
+            currentHealth = 0f;
+            Eject();
+        }
+    }
+
+    void Eject()
+    {
+        if (IsEjected) return;
+
+        IsEjected = true;
+        seatedAvatar.IsEjected = true;
+
+        // Release seated pose (un-kinematic limbs)
+        seatedAvatar.SetSeated(false);
+
+        // Stop hand override
+        seatedAvatar.ClearHandTracking();
+
+        // Switch ragdoll to falling mode
+        var ragdoll = seatedAvatar.Ragdoll;
+        if (ragdoll != null)
+            ragdoll.Handler.AnimatingMode = RagdollHandler.EAnimatingMode.Falling;
+
+        // Break tether to vehicle
+        if (seatJoint != null)
+        {
+            Destroy(seatJoint);
+            seatJoint = null;
+        }
+
+        // Apply ejection force to seat pivot rigidbody
+        if (seatRigidbody != null)
+        {
+            Vector3 spread = new Vector3(
+                Random.Range(ejectionXRange.x, ejectionXRange.y),
+                0f,
+                Random.Range(ejectionZRange.x, ejectionZRange.y));
+            Vector3 ejectionVelocity = Vector3.up * ejectionUpForce + spread;
+            seatRigidbody.AddForce(ejectionVelocity, ForceMode.VelocityChange);
+
+            // Push ragdoll bones
+            if (ragdoll != null)
+            {
+                Vector3 ragdollPush = Vector3.up * ejectionRagdollForce + spread * 0.5f;
+                ragdoll.Handler.User_AddAllBonesImpact(ragdollPush, 0.15f, ForceMode.VelocityChange);
+            }
+        }
+
+        // Detach avatar from seat pivot and enable continuous collision on ragdoll bones
+        seatedAvatar.DetachAvatar();
+
+        // Re-enable collisions between avatar and vehicle
+        ReenableAvatarCollisions();
+
+        // Play ejection sound effects from avatar
+        PlayEjectSounds();
+
+        // Disable this player's steering contribution
+        var vehicleRoot = seatedAvatar.vehicleRoot;
+        if (vehicleRoot != null)
+        {
+            var steering = vehicleRoot.GetComponent<VehicleMultiplayerSteering>();
+            if (steering != null)
+                steering.SetPlayerEnabled(playerIndex, false);
+        }
+
+        OnDeath?.Invoke(this);
+    }
+
+    void ReenableAvatarCollisions()
+    {
+        if (seatedAvatar == null || seatedAvatar.vehicleRoot == null) return;
+
+        var vehicleColliders = seatedAvatar.vehicleRoot.GetComponentsInChildren<Collider>();
+        var avatarColliders = seatedAvatar.GetComponentsInChildren<Collider>(true);
+
+        foreach (var ac in avatarColliders)
+            foreach (var vc in vehicleColliders)
+                if (ac != null && vc != null && ac != vc)
+                    Physics.IgnoreCollision(ac, vc, false);
+    }
+
+    void PlayEjectSounds()
+    {
+        if (seatedAvatar == null || !seatedAvatar.IsSpawned) return;
+
+        var sources = seatedAvatar.GetComponentsInChildren<AudioSource>(true);
+        foreach (var source in sources)
+        {
+            if (source.gameObject.CompareTag("EjectSound"))
+                source.PlayOneShot(source.clip);
+        }
+    }
+}

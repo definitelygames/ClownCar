@@ -14,6 +14,7 @@ namespace EVP
         [Header("References")]
         public VehicleController vehicle;
         public VehicleMultiplayerSteering steeringManager;
+        public VehicleDamageReceiver damageReceiver;
 
         [Header("Toggle")]
         public KeyCode uiToggleKey = KeyCode.U;
@@ -36,11 +37,15 @@ namespace EVP
                 vehicle = GetComponent<VehicleController>();
             if (steeringManager == null)
                 steeringManager = GetComponent<VehicleMultiplayerSteering>();
+            if (damageReceiver == null)
+                damageReceiver = GetComponent<VehicleDamageReceiver>();
 
             // Register default panels
             RegisterPanel(new SpeedPanel());
             RegisterPanel(new ModeIndicatorPanel());
             RegisterPanel(new SteeringInputPanel());
+            if (damageReceiver != null)
+                RegisterPanel(new HealthPanel());
         }
 
         void OnEnable()

@@ -39,6 +39,8 @@ public class SeatedAvatar : MonoBehaviour
     Transform rightHandSource;
 
     public bool IsSpawned => avatarInstance != null;
+    public RagdollAnimator2 Ragdoll => ragdoll;
+    public bool IsEjected { get; set; }
 
     void Awake()
     {
@@ -92,12 +94,41 @@ public class SeatedAvatar : MonoBehaviour
             StartCoroutine(InitializeSeatedAvatar());
     }
 
+    public void ClearHandTracking()
+    {
+        leftHandSource = null;
+        rightHandSource = null;
+    }
+
     /// <summary>
-    /// Destroy the avatar instance and clear references. No-op if not spawned.
+    /// Unparent the avatar instance from the seat pivot so the ragdoll simulates freely,
+    /// and set continuous collision detection on all ragdoll bone rigidbodies.
+    /// </summary>
+    public void DetachAvatar()
+    {
+        if (avatarInstance == null) return;
+
+        avatarInstance.transform.SetParent(null, true);
+
+        if (ragdoll != null)
+        {
+            foreach (var chain in ragdoll.Handler.Chains)
+            {
+                foreach (var bone in chain.BoneSetups)
+                {
+                    if (bone.GameRigidbody != null)
+                        bone.GameRigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// Destroy the avatar instance and clear references. No-op if not spawned or ejected.
     /// </summary>
     public void DespawnAvatar()
     {
-        if (!IsSpawned) return;
+        if (!IsSpawned || IsEjected) return;
 
         StopAllCoroutines();
         Destroy(avatarInstance);
@@ -169,7 +200,7 @@ public class SeatedAvatar : MonoBehaviour
     // Runs after RagdollAnimator2 (execution order -1) so this is the final word on hand positions
     void LateUpdate()
     {
-        if (!seated || steeringWheel == null || !IsSpawned) return;
+        if (!seated || steeringWheel == null || !IsSpawned || IsEjected) return;
 
         if (leftHandSource != null)
             leftHandSource.position = steeringWheel.TransformPoint(leftGripOffset);
