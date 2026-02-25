@@ -1,0 +1,35 @@
+{
+  "includeCoAuthoredBy": false,
+  "permissions": {
+    "allow": [
+      "mcp__ide__getDiagnostics",
+      "Bash(./tools/linctl:*)",
+      "Bash(basename:*)",
+      "Bash(cat:*)",
+      "Bash(find:*)",
+      "Bash(for:*)",
+      "Bash(git:*)",
+      "Bash(jq:*)",
+      "Bash(ls:*)",
+      "Bash(lua:*)",
+      "Bash(luacheck:*)",
+      "Bash(mkdir:*)",
+      "Bash(python3:*)",
+      "Bash(stylua:*)",
+      "WebFetch(domain:api.linear.app)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:api.github.com)",
+      "WebFetch(domain:docs.github.com)",
+      "WebSearch"
+    ],
+    "deny": [
+      "Bash(killall:*)",
+      "Bash(pkill:*)",
+      "Bash(timeout:*)"
+    ],
+    "ask": []
+  },
+  "outputStyle": "default",
+  "spinnerTipsEnabled": false
+}

@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59a64d49cf5214b8380e20a210bb0fe3, type: 3}
+  m_Name: DiscreteSteering
+  m_EditorClassIdentifier: Assembly-CSharp::EVP.DiscreteSteeringConfig
+  displayName: Steering Mode
+  player1Keys: 61000000640000007300000077000000
+  player2Keys: 14010000130100001101000012010000
+  player3Keys: 6a0000006c000000690000006b000000
+  player4Keys: 04010000060100000801000005010000
+  rampUpSpeed: 3
+  rampDownSpeed: 5
+  player1Color: {r: 1, g: 0, b: 0, a: 1}
+  player2Color: {r: 0, g: 0, b: 1, a: 1}
+  player3Color: {r: 0, g: 1, b: 0, a: 1}
+  player4Color: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  disabledColor: {r: 0.3, g: 0.3, b: 0.3, a: 0.5}

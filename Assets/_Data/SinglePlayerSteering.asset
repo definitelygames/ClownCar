@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb097c6ca8be14e3082f177bea2abbe7, type: 3}
+  m_Name: SinglePlayerSteering
+  m_EditorClassIdentifier: Assembly-CSharp::EVP.SinglePlayerSteeringConfig
+  displayName: Steering Mode
+  inputActions: {fileID: -944628639613478452, guid: cebc169f4022141a5a5a649be5e971fe, type: 3}
+  continuousForwardAndReverse: 1
+  handbrakeOverridesThrottle: 0
+  combineMode: 0

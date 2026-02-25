@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb7b14663507540e58d4298dd82a1f5d, type: 3}
+  m_Name: LeanSteering
+  m_EditorClassIdentifier: Assembly-CSharp::EVP.LeanSteeringConfig
+  displayName: Steering Mode
+  leanAffectsSteering: 1
+  steeringMultiplier: 1
+  leanAffectsLateralTorque: 1
+  leanTorqueLateral: 5000
+  leanTorqueLongitudinal: 3000
+  popWindow: 0.1
+  popEdgeThreshold: 0.95
+  popForce: 10000
+  keyboardMoveSpeed: 2
+  keyboardReturnSpeed: 3
+  player1InputType: 0
+  player2InputType: 1
+  player3InputType: 2
+  player4InputType: 3
+  boxWidth: 120
+  boxHeight: 120
+  boxSpacing: 15
+  bottomMargin: 30
+  dotRadius: 6

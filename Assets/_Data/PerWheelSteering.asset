@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e923ed65a3b164e428f8862fc2e6a389, type: 3}
+  m_Name: PerWheelSteering
+  m_EditorClassIdentifier: Assembly-CSharp::EVP.PerWheelSteeringConfig
+  displayName: Steering Mode
+  useVehicleSteerAngle: 0
+  maxSteerAngle: 40
+  rearMaxSteerAngle: 20
+  maxDriveForce: 3000
+  forceFalloffWithSpeed: 0.5
+  maxSpeed: 60
+  keyboardMoveSpeed: 2
+  keyboardReturnSpeed: 3
+  inputReturnToCenter: 1
+  centerUncontrolledWheels: 0
+  centeringSpeed: 45
+  player1InputType: 0
+  player2InputType: 1
+  player3InputType: 2
+  player4InputType: 3
+  player1Color: {r: 1, g: 0, b: 0, a: 1}
+  player2Color: {r: 0, g: 0, b: 1, a: 1}
+  player3Color: {r: 0, g: 1, b: 0, a: 1}
+  player4Color: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  uncontrolledColor: {r: 0.4, g: 0.4, b: 0.4, a: 0.6}
