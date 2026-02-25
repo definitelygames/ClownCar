@@ -326,7 +326,8 @@ public class VehicleAudio : MonoBehaviour
 
 	void DoEngineAudio ()
 		{
-		// Get the average RPMs of the drive wheels
+		// Get the average RPMs of the drive wheels.
+		// Fall back to all wheels if none are flagged as drive (e.g. per-wheel steering mode).
 
 		float averageWheelRate = 0.0f;
 		int driveWheels = 0;
@@ -334,6 +335,15 @@ public class VehicleAudio : MonoBehaviour
 		foreach (WheelData wd in m_vehicle.wheelData)
 			{
 			if (wd.wheel.drive)
+				{
+				driveWheels++;
+				averageWheelRate += wd.angularVelocity;
+				}
+			}
+
+		if (driveWheels == 0)
+			{
+			foreach (WheelData wd in m_vehicle.wheelData)
 				{
 				driveWheels++;
 				averageWheelRate += wd.angularVelocity;
