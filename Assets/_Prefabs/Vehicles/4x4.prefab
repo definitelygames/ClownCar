@@ -1508,6 +1508,7 @@ GameObject:
   - component: {fileID: 4548188072920618460}
   - component: {fileID: 5503396214516688926}
   - component: {fileID: 2660119045494595993}
+  - component: {fileID: 5215561400701360542}
   m_Layer: 0
   m_Name: DriverPivot2
   m_TagString: Untagged
@@ -1682,6 +1683,24 @@ MonoBehaviour:
   massOverride: 10
   centerOfMassY: -0.3
   vehicleRoot: {fileID: 0}
+--- !u!114 &5215561400701360542
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5149932624300391408}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2765dbf45da11448b8f3303ae7f3c242, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
+  maxHealth: 100
+  playerIndex: 1
+  ejectionUpForce: 8
+  ejectionRagdollForce: 5
+  ejectionXRange: {x: -2, y: 2}
+  ejectionZRange: {x: -2, y: 2}
 --- !u!1 &5220610774349003419
 GameObject:
   m_ObjectHideFlags: 0
@@ -2218,6 +2237,7 @@ GameObject:
   - component: {fileID: 7823533035695918683}
   - component: {fileID: 4524992335859075207}
   - component: {fileID: 7816124272386095839}
+  - component: {fileID: 3457576117955067041}
   m_Layer: 0
   m_Name: DriverPivot4
   m_TagString: Untagged
@@ -2392,6 +2412,24 @@ MonoBehaviour:
   massOverride: 10
   centerOfMassY: -0.3
   vehicleRoot: {fileID: 0}
+--- !u!114 &3457576117955067041
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6653824984070164736}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2765dbf45da11448b8f3303ae7f3c242, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
+  maxHealth: 100
+  playerIndex: 3
+  ejectionUpForce: 8
+  ejectionRagdollForce: 5
+  ejectionXRange: {x: -2, y: 2}
+  ejectionZRange: {x: -2, y: 2}
 --- !u!1 &6930476221905705165
 GameObject:
   m_ObjectHideFlags: 0
@@ -2404,6 +2442,7 @@ GameObject:
   - component: {fileID: 4216563440853148918}
   - component: {fileID: 2155884806995612251}
   - component: {fileID: 6506866462763914233}
+  - component: {fileID: 5815493322419096863}
   m_Layer: 0
   m_Name: DriverPivot3
   m_TagString: Untagged
@@ -2578,6 +2617,24 @@ MonoBehaviour:
   massOverride: 10
   centerOfMassY: -0.3
   vehicleRoot: {fileID: 0}
+--- !u!114 &5815493322419096863
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6930476221905705165}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2765dbf45da11448b8f3303ae7f3c242, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
+  maxHealth: 100
+  playerIndex: 2
+  ejectionUpForce: 8
+  ejectionRagdollForce: 5
+  ejectionXRange: {x: -2, y: 2}
+  ejectionZRange: {x: -2, y: 2}
 --- !u!1 &7049439618078611892
 GameObject:
   m_ObjectHideFlags: 0
@@ -3141,6 +3198,7 @@ GameObject:
   - component: {fileID: 1045864386116426471}
   - component: {fileID: 4842946504899725961}
   - component: {fileID: 7293841056218374520}
+  - component: {fileID: 1970123848193113377}
   m_Layer: 0
   m_Name: DriverPivot1
   m_TagString: Untagged
@@ -3315,6 +3373,24 @@ MonoBehaviour:
   massOverride: 10
   centerOfMassY: -0.3
   vehicleRoot: {fileID: 0}
+--- !u!114 &1970123848193113377
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8486483253475120149}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2765dbf45da11448b8f3303ae7f3c242, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
+  maxHealth: 100
+  playerIndex: 0
+  ejectionUpForce: 6
+  ejectionRagdollForce: 3
+  ejectionXRange: {x: -6, y: 6}
+  ejectionZRange: {x: -4, y: 4}
 --- !u!1 &8724612222226912752
 GameObject:
   m_ObjectHideFlags: 0
@@ -3364,6 +3440,7 @@ GameObject:
   - component: {fileID: 7897232125848669975}
   - component: {fileID: 1637727296443693563}
   - component: {fileID: 8023566253714040253}
+  - component: {fileID: 7948899139891609297}
   m_Layer: 0
   m_Name: 4x4
   m_TagString: Untagged
@@ -3492,13 +3569,13 @@ MonoBehaviour:
   handbrakeMode: 0
   maxHandbrakeSlip: 4
   maxHandbrakeRatio: 0.5
-  tractionControl: 0
+  tractionControl: 1
   tractionControlRatio: 0.8
   brakeAssist: 1
   brakeAssistRatio: 1
   steeringLimit: 0
   steeringLimitRatio: 0.8
-  steeringAssist: 0
+  steeringAssist: 1
   steeringAssistRatio: 0.5
   steerInput: 0
   throttleInput: 0
@@ -3705,6 +3782,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EVP.VehicleHUD
   vehicle: {fileID: 4636828781410038001}
   steeringManager: {fileID: 1728894467473345660}
+  damageReceiver: {fileID: 0}
   uiToggleKey: 117
 --- !u!114 &8023566253714040253
 MonoBehaviour:
@@ -3724,6 +3802,30 @@ MonoBehaviour:
   - {fileID: 2660119045494595993}
   - {fileID: 6506866462763914233}
   - {fileID: 7816124272386095839}
+--- !u!114 &7948899139891609297
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8911938957469847375}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db9cb531b8b584525a291b6e310251ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::VehicleDamageReceiver
+  vehicle: {fileID: 4636828781410038001}
+  playerHealths:
+  - {fileID: 1970123848193113377}
+  - {fileID: 5215561400701360542}
+  - {fileID: 5815493322419096863}
+  - {fileID: 3457576117955067041}
+  vehicleDamageMultiplier: 2
+  playerDamageMultiplier: 4
+  minImpactVelocity: 3
+  maxDamagePerImpact: 60
+  distanceDamping: 1
+  vehicleMaxHealth: 200
 --- !u!1 &9013631196929879561
 GameObject:
   m_ObjectHideFlags: 0

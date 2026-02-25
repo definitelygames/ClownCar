@@ -96,14 +96,14 @@ public class PlayerHealth : MonoBehaviour
             }
         }
 
+        // Play ejection sound effects before detaching
+        PlayEjectSounds();
+
         // Detach avatar from seat pivot and enable continuous collision on ragdoll bones
         seatedAvatar.DetachAvatar();
 
         // Re-enable collisions between avatar and vehicle
         ReenableAvatarCollisions();
-
-        // Play ejection sound effects from avatar
-        PlayEjectSounds();
 
         // Disable this player's steering contribution
         var vehicleRoot = seatedAvatar.vehicleRoot;
