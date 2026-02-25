@@ -9,7 +9,7 @@ namespace EVP
     public abstract class SteeringMethodConfig : ScriptableObject
     {
         [Tooltip("Display name shown in UI when this mode is active.")]
-        public string displayName = "Steering Mode";
+        public string displayName = "Unnamed Mode";
 
         /// <summary>
         /// Factory method: creates a new runtime instance of the corresponding SteeringMethod.

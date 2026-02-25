@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb097c6ca8be14e3082f177bea2abbe7, type: 3}
   m_Name: SinglePlayerSteering
   m_EditorClassIdentifier: Assembly-CSharp::EVP.SinglePlayerSteeringConfig
-  displayName: Steering Mode
+  displayName: Single Player
   inputActions: {fileID: -944628639613478452, guid: cebc169f4022141a5a5a649be5e971fe, type: 3}
-  continuousForwardAndReverse: 1
+  inputRampSpeed: 3
+  inputReturnSpeed: 5
   handbrakeOverridesThrottle: 0
-  combineMode: 0

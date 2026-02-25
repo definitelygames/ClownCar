@@ -5,7 +5,7 @@ namespace EVP
 {
     /// <summary>
     /// Single-player steering using Unity's Input System.
-    /// Ported from VehicleNewInput: handles steer/throttle/brake with continuous forward/reverse logic.
+    /// Handles steer/throttle/brake with continuous forward/reverse logic.
     /// Handbrake and reset are handled by the manager.
     /// </summary>
     public class SinglePlayerSteering : SteeringMethod
@@ -17,13 +17,16 @@ namespace EVP
         private InputAction steerAction;
         private InputAction throttleAction;
         private InputAction brakeAction;
-        private InputAction reverseModifierAction;
 
-        // State
+        // Smoothed raw axes (ramped toward raw input)
+        private float smoothedSteer;
+        private float smoothedThrottle;
+        private float smoothedBrake;
+
+        // Final output
         private float steerInput;
         private float throttleInput;
         private float brakeInput;
-        private bool reverseModifierHeld;
 
         public SinglePlayerSteering(SinglePlayerSteeringConfig config)
         {
@@ -39,6 +42,9 @@ namespace EVP
         public override void Deactivate()
         {
             vehicleActionMap?.Disable();
+            smoothedSteer = 0f;
+            smoothedThrottle = 0f;
+            smoothedBrake = 0f;
             steerInput = 0f;
             throttleInput = 0f;
             brakeInput = 0f;
@@ -62,30 +68,33 @@ namespace EVP
             steerAction = vehicleActionMap.FindAction("Steer");
             throttleAction = vehicleActionMap.FindAction("Throttle");
             brakeAction = vehicleActionMap.FindAction("Brake");
-            reverseModifierAction = vehicleActionMap.FindAction("ReverseModifier");
         }
 
         public override void ReadInput(float deltaTime)
         {
             if (vehicleActionMap == null || !vehicleActionMap.enabled) return;
 
-            // Steer
-            steerInput = ReadAxisWithMultipleBindings(steerAction);
-            steerInput = Mathf.Clamp(steerInput, -1f, 1f);
+            float rawSteer = steerAction?.ReadValue<float>() ?? 0f;
+            float rawThrottle = throttleAction?.ReadValue<float>() ?? 0f;
+            float rawBrake = brakeAction?.ReadValue<float>() ?? 0f;
 
-            // Throttle/Brake combined axis (keyboard W/S style)
-            float combinedAxis = ReadAxisWithMultipleBindings(throttleAction);
+            smoothedSteer = RampAxis(smoothedSteer, rawSteer, deltaTime);
+            smoothedThrottle = RampAxis(smoothedThrottle, rawThrottle, deltaTime);
+            smoothedBrake = RampAxis(smoothedBrake, rawBrake, deltaTime);
 
-            // Separate brake axis (gamepad triggers)
-            float separateBrake = brakeAction?.ReadValue<float>() ?? 0f;
-
-            float forwardInput = Mathf.Clamp01(combinedAxis);
-            float reverseInput = Mathf.Max(Mathf.Clamp01(-combinedAxis), separateBrake);
-
-            // Reverse modifier (for non-continuous mode)
-            reverseModifierHeld = reverseModifierAction?.ReadValue<float>() > 0.5f;
+            steerInput = Mathf.Clamp(smoothedSteer, -1f, 1f);
+            float forwardInput = Mathf.Clamp01(smoothedThrottle);
+            float reverseInput = Mathf.Max(Mathf.Clamp01(-smoothedThrottle), Mathf.Clamp01(smoothedBrake));
 
             TranslateToVehicleInput(forwardInput, reverseInput);
+        }
+
+        private float RampAxis(float current, float target, float dt)
+        {
+            if (Mathf.Abs(target) > 0.01f)
+                return Mathf.MoveTowards(current, target, config.inputRampSpeed * dt);
+            else
+                return Mathf.MoveTowards(current, 0f, config.inputReturnSpeed * dt);
         }
 
         public override VehicleInput GetVehicleInput(float fixedDeltaTime)
@@ -98,102 +107,39 @@ namespace EVP
             };
         }
 
-        private float ReadAxisWithMultipleBindings(InputAction action)
-        {
-            if (action == null) return 0f;
-
-            float value = action.ReadValue<float>();
-
-            if (config.combineMode != InputCombineMode.TakeHighestMagnitude)
-                value = CombineBindingValues(action);
-
-            return value;
-        }
-
-        private float CombineBindingValues(InputAction action)
-        {
-            float sum = 0f;
-            int count = 0;
-            float maxMagnitude = 0f;
-            float maxValue = 0f;
-
-            foreach (var control in action.controls)
-            {
-                if (control.IsPressed() || Mathf.Abs((float)control.ReadValueAsObject()) > 0.01f)
-                {
-                    float val = (float)control.ReadValueAsObject();
-                    sum += val;
-                    count++;
-
-                    if (Mathf.Abs(val) > maxMagnitude)
-                    {
-                        maxMagnitude = Mathf.Abs(val);
-                        maxValue = val;
-                    }
-                }
-            }
-
-            switch (config.combineMode)
-            {
-                case InputCombineMode.Sum:
-                    return Mathf.Clamp(sum, -1f, 1f);
-                case InputCombineMode.Average:
-                    return count > 0 ? sum / count : 0f;
-                case InputCombineMode.TakeHighestMagnitude:
-                default:
-                    return maxValue;
-            }
-        }
-
         private void TranslateToVehicleInput(float forwardInput, float reverseInput)
         {
-            if (config.continuousForwardAndReverse)
-            {
-                float minSpeed = 0.1f;
-                float minInput = 0.1f;
+            float minSpeed = 0.1f;
+            float minInput = 0.1f;
 
-                if (vehicle.speed > minSpeed)
-                {
-                    throttleInput = forwardInput;
-                    brakeInput = reverseInput;
-                }
-                else
-                {
-                    if (reverseInput > minInput)
-                    {
-                        throttleInput = -reverseInput;
-                        brakeInput = 0f;
-                    }
-                    else if (forwardInput > minInput)
-                    {
-                        if (vehicle.speed < -minSpeed)
-                        {
-                            throttleInput = 0f;
-                            brakeInput = forwardInput;
-                        }
-                        else
-                        {
-                            throttleInput = forwardInput;
-                            brakeInput = 0f;
-                        }
-                    }
-                    else
-                    {
-                        throttleInput = 0f;
-                        brakeInput = 0f;
-                    }
-                }
+            if (vehicle.speed > minSpeed)
+            {
+                throttleInput = forwardInput;
+                brakeInput = reverseInput;
             }
             else
             {
-                if (!reverseModifierHeld)
+                if (reverseInput > minInput)
                 {
-                    throttleInput = forwardInput;
-                    brakeInput = reverseInput;
+                    throttleInput = -reverseInput;
+                    brakeInput = 0f;
+                }
+                else if (forwardInput > minInput)
+                {
+                    if (vehicle.speed < -minSpeed)
+                    {
+                        throttleInput = 0f;
+                        brakeInput = forwardInput;
+                    }
+                    else
+                    {
+                        throttleInput = forwardInput;
+                        brakeInput = 0f;
+                    }
                 }
                 else
                 {
-                    throttleInput = -reverseInput;
+                    throttleInput = 0f;
                     brakeInput = 0f;
                 }
             }

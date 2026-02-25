@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e923ed65a3b164e428f8862fc2e6a389, type: 3}
   m_Name: PerWheelSteering
   m_EditorClassIdentifier: Assembly-CSharp::EVP.PerWheelSteeringConfig
-  displayName: Steering Mode
+  displayName: Per-Wheel
   useVehicleSteerAngle: 0
   maxSteerAngle: 40
   rearMaxSteerAngle: 20

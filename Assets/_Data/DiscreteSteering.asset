@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59a64d49cf5214b8380e20a210bb0fe3, type: 3}
   m_Name: DiscreteSteering
   m_EditorClassIdentifier: Assembly-CSharp::EVP.DiscreteSteeringConfig
-  displayName: Steering Mode
+  displayName: Discrete
   player1Keys: 61000000640000007300000077000000
   player2Keys: 14010000130100001101000012010000
   player3Keys: 6a0000006c000000690000006b000000

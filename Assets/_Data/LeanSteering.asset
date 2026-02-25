@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb7b14663507540e58d4298dd82a1f5d, type: 3}
   m_Name: LeanSteering
   m_EditorClassIdentifier: Assembly-CSharp::EVP.LeanSteeringConfig
-  displayName: Steering Mode
+  displayName: Lean
   leanAffectsSteering: 1
   steeringMultiplier: 1
   leanAffectsLateralTorque: 1
