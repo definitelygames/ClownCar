@@ -27,6 +27,8 @@ namespace EVP
         public float keyboardMoveSpeed = 2.0f;
         [Tooltip("How fast input returns to zero when no key held (units/sec).")]
         public float keyboardReturnSpeed = 3.0f;
+        [Tooltip("If false, input stays at its last value when released instead of returning to center.")]
+        public bool inputReturnToCenter = true;
 
         [Header("Uncontrolled Wheels")]
         [Tooltip("If true, wheels with no player gradually center their steering.")]

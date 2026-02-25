@@ -338,12 +338,12 @@ namespace EVP
 
             if (hasH)
                 player.inputPosition.x = Mathf.MoveTowards(player.inputPosition.x, hInput, config.keyboardMoveSpeed * dt);
-            else
+            else if (config.inputReturnToCenter)
                 player.inputPosition.x = Mathf.MoveTowards(player.inputPosition.x, 0f, config.keyboardReturnSpeed * dt);
 
             if (hasV)
                 player.inputPosition.y = Mathf.MoveTowards(player.inputPosition.y, vInput, config.keyboardMoveSpeed * dt);
-            else
+            else if (config.inputReturnToCenter)
                 player.inputPosition.y = Mathf.MoveTowards(player.inputPosition.y, 0f, config.keyboardReturnSpeed * dt);
 
             player.inputPosition.x = Mathf.Clamp(player.inputPosition.x, -1f, 1f);
@@ -360,8 +360,12 @@ namespace EVP
             }
 
             Vector2 stick = gamepads[gamepadIndex].leftStick.ReadValue();
-            player.inputPosition.x = Mathf.Clamp(stick.x, -1f, 1f);
-            player.inputPosition.y = Mathf.Clamp(stick.y, -1f, 1f);
+            bool hasInput = stick.sqrMagnitude > 0.04f; // ~0.2 deadzone
+            if (hasInput || config.inputReturnToCenter)
+            {
+                player.inputPosition.x = Mathf.Clamp(stick.x, -1f, 1f);
+                player.inputPosition.y = Mathf.Clamp(stick.y, -1f, 1f);
+            }
         }
 
         private void UpdateMouseInput(PerWheelPlayerData player)
