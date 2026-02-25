@@ -113,4 +113,13 @@ namespace EVP
         [HideInInspector] public float popTimeRemaining;
         [HideInInspector] public bool wasAtEdge;
     }
+
+    [System.Serializable]
+    public class PerWheelPlayerData
+    {
+        public bool isEnabled;
+        public int wheelIndex = -1;
+        public LeanInputType inputType;
+        [HideInInspector] public Vector2 inputPosition; // x=steer, y=throttle
+    }
 }

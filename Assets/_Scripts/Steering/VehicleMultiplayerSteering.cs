@@ -8,6 +8,7 @@ namespace EVP
     /// and delegates to the active method. Handles universal controls (handbrake, reset),
     /// player toggles (1-4 keys), and UI toggle (U key).
     /// </summary>
+    [DefaultExecutionOrder(100)]
     public class VehicleMultiplayerSteering : MonoBehaviour
     {
         [Header("Vehicle")]

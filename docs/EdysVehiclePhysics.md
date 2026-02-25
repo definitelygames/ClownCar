@@ -177,9 +177,13 @@ vehicle.ResetVehicle()     // Reset vehicle to upright position
 ```csharp
 Rigidbody rb = vehicle.cachedRigidbody;
 rb.centerOfMass            // Center of mass (local space)
+rb.linearVelocity          // Unity 6+: use linearVelocity, not velocity (deprecated)
+rb.angularVelocity         // Still valid in Unity 6
 rb.AddForceAtPosition(force, worldPoint);
 rb.AddTorque(torque, ForceMode.Force);
 ```
+
+> **Unity 6+ note:** `Rigidbody.velocity` was renamed to `Rigidbody.linearVelocity`. Unity's Script Updater will auto-fix this, but always use `linearVelocity` in new code.
 
 ### Aerodynamic Forces (applied internally in FixedUpdate)
 
@@ -197,6 +201,27 @@ m_vehicleFrame.baseHeight      // Average vertical position of wheels
 m_vehicleFrame.frontWidth      // Front axle half-width
 m_vehicleFrame.rearWidth       // Rear axle half-width
 ```
+
+## Per-Wheel Bypass Pattern
+
+EVP applies a single global `steerInput`/`throttleInput` to all flagged wheels. To control wheels individually:
+
+1. **Disable EVP per-wheel flags at runtime:** `vehicle.wheels[i].steer = false; vehicle.wheels[i].drive = false;`
+2. **Write steer angles directly:** `vehicle.wheelData[i].collider.steerAngle = angle;`
+3. **Apply drive force via Rigidbody:** `rb.AddForceAtPosition(force, contactPoint)` — do NOT use `WheelCollider.motorTorque` because EVP zeroes out WheelCollider friction stiffness (`stiffness = 0.0f`), so PhysX won't produce force from motorTorque.
+4. **Keep `brake = true`** so EVP braking still works via `brakeInput`.
+5. **Restore original flags on deactivate** to return to normal EVP operation.
+6. **Execution order:** Use `[DefaultExecutionOrder(100)]` to run after EVP's FixedUpdate (default order 0).
+
+## Unity 6+ API Changes
+
+| Deprecated | Replacement | Notes |
+|-----------|-------------|-------|
+| `Rigidbody.velocity` | `Rigidbody.linearVelocity` | Auto-fixed by Unity Script Updater |
+| `Rigidbody.angularVelocity` | `Rigidbody.angularVelocity` | No change (not deprecated) |
+| `Rigidbody.isKinematic` | `Rigidbody.isKinematic` | No change |
+
+Unity's Script Updating Consent dialog appears when importing scripts with deprecated APIs. Select "Yes, for these and other files" to auto-fix.
 
 ## Upgrade Notes (Unity 4 → Unity 5)
 
