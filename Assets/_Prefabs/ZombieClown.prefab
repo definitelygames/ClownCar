@@ -104,7 +104,7 @@ MonoBehaviour:
     _Editor_SelectedChain: 2
     _Editor_ChainCategory: 0
     _EditorCategory: 3
-    _EditorMainCategory: 0
+    _EditorMainCategory: 1
     _EditorMotionCategory: 2
     m_hemi: {fileID: 0}
     m_cyli: {fileID: 0}
@@ -246,7 +246,7 @@ MonoBehaviour:
     RagdollThicknessMultiplier: 1
     ReferenceMass: 50
     RigidbodiesInterpolation: 1
-    RigidbodiesDetectionMode: 0
+    RigidbodiesDetectionMode: 1
     RigidbodyDragValue: 0
     RigidbodyAngularDragValue: 0.2
     JointContactDistance: 0
@@ -280,7 +280,7 @@ MonoBehaviour:
     IgnoreSourceSkeletonColliders: 1
     WaitForInit: 1
     AnimationMatchLimits: 1
-    TargetParentForRagdollDummy: {fileID: 0}
+    TargetParentForRagdollDummy: {fileID: 3010585657127546814}
     BoundedCollidersIgnoreScaleup: 1.2
     UnityVelocitySolverIterations: 0
     DisableMecanimOnSleep: 1

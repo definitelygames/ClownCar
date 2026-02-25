@@ -3820,12 +3820,12 @@ MonoBehaviour:
   - {fileID: 5215561400701360542}
   - {fileID: 5815493322419096863}
   - {fileID: 3457576117955067041}
-  vehicleDamageMultiplier: 2
-  playerDamageMultiplier: 4
-  minImpactVelocity: 3
+  vehicleDamageMultiplier: 1
+  playerDamageMultiplier: 80
+  minImpactVelocity: 5
   maxDamagePerImpact: 60
   distanceDamping: 1
-  vehicleMaxHealth: 200
+  vehicleMaxHealth: 300
 --- !u!1 &9013631196929879561
 GameObject:
   m_ObjectHideFlags: 0

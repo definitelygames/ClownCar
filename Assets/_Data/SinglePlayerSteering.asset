@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EVP.SinglePlayerSteeringConfig
   displayName: Single Player
   inputActions: {fileID: -944628639613478452, guid: cebc169f4022141a5a5a649be5e971fe, type: 3}
-  inputRampSpeed: 3
+  inputRampSpeed: 2
   inputReturnSpeed: 5
   handbrakeOverridesThrottle: 0

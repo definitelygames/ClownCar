@@ -116,8 +116,10 @@ public class SeatedAvatar : MonoBehaviour
             {
                 foreach (var bone in chain.BoneSetups)
                 {
-                    if (bone.GameRigidbody != null)
-                        bone.GameRigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
+                    if (bone.GameRigidbody == null) continue;
+                    bone.GameRigidbody.isKinematic = false;
+                    bone.GameRigidbody.useGravity = true;
+                    bone.GameRigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
                 }
             }
         }
