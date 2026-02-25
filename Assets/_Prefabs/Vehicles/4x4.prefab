@@ -3361,7 +3361,6 @@ GameObject:
   - component: {fileID: 4530325931296557948}
   - component: {fileID: 8029924058311635952}
   - component: {fileID: 3786378012956029115}
-  - component: {fileID: 3504826622693841001}
   - component: {fileID: 7897232125848669975}
   - component: {fileID: 1637727296443693563}
   - component: {fileID: 8023566253714040253}
@@ -3670,24 +3669,6 @@ MonoBehaviour:
   minIntensityTime: 1
   maxIntensityTime: 7
   limitIntensityTime: 8
---- !u!114 &3504826622693841001
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8911938957469847375}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e716af2fc4e2ff443b55f2492761cd23, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp-firstpass::EVP.VehicleVisualEffects
-  steeringWheel: {fileID: 1951135215909972676}
-  degreesOfRotation: 420
-  brakesRenderer: {fileID: 0}
-  brakesMaterialIndex: 0
-  brakesOnMaterial: {fileID: 0}
-  brakesOffMaterial: {fileID: 0}
 --- !u!114 &7897232125848669975
 MonoBehaviour:
   m_ObjectHideFlags: 0
