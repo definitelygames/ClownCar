@@ -41,6 +41,9 @@ namespace EVP
         // Player state (shared across all methods)
         public bool[] PlayerEnabled { get; private set; } = { true, false, false, false };
 
+        /// <summary>Fired when a player is toggled. Args: (playerIndex, enabled).</summary>
+        public System.Action<int, bool> OnPlayerToggled;
+
         // Universal input state
         public float HandbrakeInput { get; private set; }
         public bool ShowUI { get; private set; } = true;
@@ -217,21 +220,25 @@ namespace EVP
             if (Input.GetKeyDown(player1ToggleKey))
             {
                 PlayerEnabled[0] = !PlayerEnabled[0];
+                OnPlayerToggled?.Invoke(0, PlayerEnabled[0]);
                 changed = true;
             }
             if (Input.GetKeyDown(player2ToggleKey))
             {
                 PlayerEnabled[1] = !PlayerEnabled[1];
+                OnPlayerToggled?.Invoke(1, PlayerEnabled[1]);
                 changed = true;
             }
             if (Input.GetKeyDown(player3ToggleKey))
             {
                 PlayerEnabled[2] = !PlayerEnabled[2];
+                OnPlayerToggled?.Invoke(2, PlayerEnabled[2]);
                 changed = true;
             }
             if (Input.GetKeyDown(player4ToggleKey))
             {
                 PlayerEnabled[3] = !PlayerEnabled[3];
+                OnPlayerToggled?.Invoke(3, PlayerEnabled[3]);
                 changed = true;
             }
 
@@ -294,6 +301,7 @@ namespace EVP
             if (index >= 0 && index < PlayerEnabled.Length)
             {
                 PlayerEnabled[index] = enabled;
+                OnPlayerToggled?.Invoke(index, enabled);
                 activeMethod?.OnPlayersChanged();
             }
         }

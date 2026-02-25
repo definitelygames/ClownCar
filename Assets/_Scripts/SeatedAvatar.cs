@@ -5,8 +5,8 @@ using FIMSpace.FProceduralAnimation;
 
 /// <summary>
 /// Attach to a seat pivot (e.g. DriverFrontPivot) that has a Rigidbody + ConfigurableJoint.
-/// Instantiates an avatar prefab, ignores collisions with the vehicle, and tunes the pivot physics.
-/// The existing joint handles all sway physics.
+/// Call SpawnAvatar()/DespawnAvatar() to control the avatar lifecycle (managed by SeatedAvatarManager).
+/// Awake() only handles physics tuning and vehicle root detection.
 /// When seated, limbs are kinematic (follow animation) and hands are locked to the steering wheel
 /// via direct source bone positioning in LateUpdate (runs after RagdollAnimator2).
 /// </summary>
@@ -38,14 +38,10 @@ public class SeatedAvatar : MonoBehaviour
     Transform leftHandSource;
     Transform rightHandSource;
 
+    public bool IsSpawned => avatarInstance != null;
+
     void Awake()
     {
-        if (avatarPrefab == null)
-        {
-            Debug.LogError("[SeatedAvatar] No avatarPrefab assigned on " + name);
-            return;
-        }
-
         var rb = GetComponent<Rigidbody>();
 
         // Apply physics tuning
@@ -63,8 +59,22 @@ public class SeatedAvatar : MonoBehaviour
             if (joint != null && joint.connectedBody != null)
                 vehicleRoot = joint.connectedBody.transform;
         }
+    }
 
-        // Instantiate avatar
+    /// <summary>
+    /// Instantiate the avatar, set up collision ignoring, seated limbs, and hand tracking.
+    /// No-op if already spawned.
+    /// </summary>
+    public void SpawnAvatar()
+    {
+        if (IsSpawned) return;
+
+        if (avatarPrefab == null)
+        {
+            Debug.LogError("[SeatedAvatar] No avatarPrefab assigned on " + name);
+            return;
+        }
+
         avatarInstance = Instantiate(avatarPrefab, transform);
         avatarInstance.transform.localPosition = offset;
         avatarInstance.transform.localRotation = Quaternion.identity;
@@ -80,6 +90,21 @@ public class SeatedAvatar : MonoBehaviour
         // Defer collision ignoring and seated setup — RagdollAnimator2 creates dummy colliders in Start()
         if (vehicleRoot != null)
             StartCoroutine(InitializeSeatedAvatar());
+    }
+
+    /// <summary>
+    /// Destroy the avatar instance and clear references. No-op if not spawned.
+    /// </summary>
+    public void DespawnAvatar()
+    {
+        if (!IsSpawned) return;
+
+        StopAllCoroutines();
+        Destroy(avatarInstance);
+        avatarInstance = null;
+        ragdoll = null;
+        leftHandSource = null;
+        rightHandSource = null;
     }
 
     IEnumerator InitializeSeatedAvatar()
@@ -144,7 +169,7 @@ public class SeatedAvatar : MonoBehaviour
     // Runs after RagdollAnimator2 (execution order -1) so this is the final word on hand positions
     void LateUpdate()
     {
-        if (!seated || steeringWheel == null) return;
+        if (!seated || steeringWheel == null || !IsSpawned) return;
 
         if (leftHandSource != null)
             leftHandSource.position = steeringWheel.TransformPoint(leftGripOffset);
