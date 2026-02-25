@@ -3364,6 +3364,7 @@ GameObject:
   - component: {fileID: 3504826622693841001}
   - component: {fileID: 7897232125848669975}
   - component: {fileID: 1637727296443693563}
+  - component: {fileID: 8023566253714040253}
   m_Layer: 0
   m_Name: 4x4
   m_TagString: Untagged
@@ -3724,6 +3725,24 @@ MonoBehaviour:
   vehicle: {fileID: 4636828781410038001}
   steeringManager: {fileID: 1728894467473345660}
   uiToggleKey: 117
+--- !u!114 &8023566253714040253
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8911938957469847375}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8a8165dccaa54fd49ada7fd3d64715d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SeatedAvatarManager
+  steering: {fileID: 1728894467473345660}
+  seats:
+  - {fileID: 7293841056218374520}
+  - {fileID: 2660119045494595993}
+  - {fileID: 6506866462763914233}
+  - {fileID: 7816124272386095839}
 --- !u!1 &9013631196929879561
 GameObject:
   m_ObjectHideFlags: 0
