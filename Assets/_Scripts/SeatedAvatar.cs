@@ -1,14 +1,12 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using FIMSpace.FProceduralAnimation;
 
 /// <summary>
 /// Attach to a seat pivot (e.g. DriverFrontPivot) that has a Rigidbody + ConfigurableJoint.
 /// Call SpawnAvatar()/DespawnAvatar() to control the avatar lifecycle (managed by SeatedAvatarManager).
 /// Awake() only handles physics tuning and vehicle root detection.
 /// When seated, limbs are kinematic (follow animation) and hands are locked to the steering wheel
-/// via direct source bone positioning in LateUpdate (runs after RagdollAnimator2).
+/// via direct source bone positioning in LateUpdate.
 /// </summary>
 public class SeatedAvatar : MonoBehaviour
 {
@@ -34,13 +32,13 @@ public class SeatedAvatar : MonoBehaviour
     public Transform vehicleRoot;
 
     GameObject avatarInstance;
-    RagdollAnimator2 ragdoll;
+    SimpleRagdoll ragdoll;
     Transform leftHandSource;
     Transform rightHandSource;
 
     public bool IsSpawned => avatarInstance != null;
     public Transform AvatarTransform => avatarInstance != null ? avatarInstance.transform : null;
-    public RagdollAnimator2 Ragdoll => ragdoll;
+    public SimpleRagdoll Ragdoll => ragdoll;
     public bool IsEjected { get; set; }
 
     void Awake()
@@ -90,9 +88,9 @@ public class SeatedAvatar : MonoBehaviour
                 animator.runtimeAnimatorController = seatedAnimatorController;
         }
 
-        // Defer collision ignoring and seated setup — RagdollAnimator2 creates dummy colliders in Start()
+        // SimpleRagdoll uses real bone colliders (no dummy creation), so no frame delay needed
         if (vehicleRoot != null)
-            StartCoroutine(InitializeSeatedAvatar());
+            InitializeSeatedAvatar();
     }
 
     public void ClearHandTracking()
@@ -112,18 +110,7 @@ public class SeatedAvatar : MonoBehaviour
         avatarInstance.transform.SetParent(null, true);
 
         if (ragdoll != null)
-        {
-            foreach (var chain in ragdoll.Handler.Chains)
-            {
-                foreach (var bone in chain.BoneSetups)
-                {
-                    if (bone.GameRigidbody == null) continue;
-                    bone.GameRigidbody.isKinematic = false;
-                    bone.GameRigidbody.useGravity = true;
-                    bone.GameRigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
-                }
-            }
-        }
+            ragdoll.SetContinuousCollision();
     }
 
     /// <summary>
@@ -133,7 +120,6 @@ public class SeatedAvatar : MonoBehaviour
     {
         if (!IsSpawned || IsEjected) return;
 
-        StopAllCoroutines();
         Destroy(avatarInstance);
         avatarInstance = null;
         ragdoll = null;
@@ -141,20 +127,13 @@ public class SeatedAvatar : MonoBehaviour
         rightHandSource = null;
     }
 
-    IEnumerator InitializeSeatedAvatar()
+    void InitializeSeatedAvatar()
     {
-        // Wait for RagdollAnimator2.Start() to create dummy colliders
-        yield return null;
-
         var vehicleColliders = vehicleRoot.GetComponentsInChildren<Collider>();
 
-        // Tell the ragdoll handler to ignore vehicle colliders (covers dummy bones)
-        ragdoll = avatarInstance.GetComponentInChildren<RagdollAnimator2>();
+        ragdoll = avatarInstance.GetComponentInChildren<SimpleRagdoll>();
         if (ragdoll != null)
-        {
-            var vehicleList = new List<Collider>(vehicleColliders);
-            ragdoll.Handler.IgnoreCollisionWith(vehicleList);
-        }
+            ragdoll.IgnoreCollisionWith(vehicleColliders);
 
         // Also ignore collisions on any non-ragdoll colliders on the avatar
         var avatarColliders = avatarInstance.GetComponentsInChildren<Collider>();
@@ -163,32 +142,9 @@ public class SeatedAvatar : MonoBehaviour
                 if (ac != vc)
                     Physics.IgnoreCollision(ac, vc);
 
-        // Setup seated pose
-        if (ragdoll != null)
-        {
-            if (seated)
-                ApplySeatedLimbs(true);
-
-            if (steeringWheel != null)
-                SetupHandTracking();
-        }
-    }
-
-    void ApplySeatedLimbs(bool kinematic)
-    {
-        var handler = ragdoll.Handler;
-        SetChainKinematic(handler.GetChain(ERagdollChainType.LeftLeg), kinematic);
-        SetChainKinematic(handler.GetChain(ERagdollChainType.RightLeg), kinematic);
-        SetChainKinematic(handler.GetChain(ERagdollChainType.LeftArm), kinematic);
-        SetChainKinematic(handler.GetChain(ERagdollChainType.RightArm), kinematic);
-        handler.RefreshAllChainsDynamicParameters();
-    }
-
-    void SetChainKinematic(RagdollBonesChain chain, bool kinematic)
-    {
-        if (chain == null) return;
-        foreach (var bone in chain.BoneSetups)
-            bone.ForceKinematicOnStanding = kinematic;
+        // Setup hand tracking (ragdoll starts kinematic via SimpleRagdoll.Awake)
+        if (ragdoll != null && steeringWheel != null)
+            SetupHandTracking();
     }
 
     void SetupHandTracking()
@@ -200,7 +156,6 @@ public class SeatedAvatar : MonoBehaviour
         rightHandSource = animator.GetBoneTransform(HumanBodyBones.RightHand);
     }
 
-    // Runs after RagdollAnimator2 (execution order -1) so this is the final word on hand positions
     void LateUpdate()
     {
         if (!seated || steeringWheel == null || !IsSpawned || IsEjected) return;
@@ -218,6 +173,6 @@ public class SeatedAvatar : MonoBehaviour
     {
         seated = value;
         if (ragdoll == null) return;
-        ApplySeatedLimbs(value);
+        ragdoll.SetAllKinematic(value);
     }
 }

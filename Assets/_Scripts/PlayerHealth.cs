@@ -1,6 +1,5 @@
 using UnityEngine;
 using EVP;
-using FIMSpace.FProceduralAnimation;
 
 /// <summary>
 /// Per-player health tracking and ejection. Attach to a seat pivot alongside SeatedAvatar.
@@ -75,10 +74,10 @@ public class PlayerHealth : MonoBehaviour
         // Stop hand override
         seatedAvatar.ClearHandTracking();
 
-        // Switch ragdoll to falling mode
+        // Enable full ragdoll (disables animator, sets bones non-kinematic)
         var ragdoll = seatedAvatar.Ragdoll;
         if (ragdoll != null)
-            ragdoll.Handler.AnimatingMode = RagdollHandler.EAnimatingMode.Falling;
+            ragdoll.EnableRagdoll();
 
         // Break tether to vehicle
         if (seatJoint != null)
@@ -102,7 +101,7 @@ public class PlayerHealth : MonoBehaviour
             if (ragdoll != null)
             {
                 Vector3 ragdollPush = Vector3.up * ejectionRagdollForce + impactHorizontal * ejectionImpactForce * 0.5f;
-                ragdoll.Handler.User_AddAllBonesImpact(ragdollPush, 0.15f, ForceMode.VelocityChange);
+                ragdoll.ApplyForceToAll(ragdollPush, ForceMode.VelocityChange);
             }
         }
 
