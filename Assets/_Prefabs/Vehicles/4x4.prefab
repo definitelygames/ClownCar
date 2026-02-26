@@ -780,8 +780,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EVP.VehicleMultiplayerSteering
   vehicle: {fileID: 4636828781410038001}
   modes:
-  - {fileID: 11400000, guid: d6cd969b89c304d818d2dd5cf9c168ad, type: 2}
   - {fileID: 11400000, guid: e882ccee4cbd446d98b6035016f1698f, type: 2}
+  - {fileID: 11400000, guid: d6cd969b89c304d818d2dd5cf9c168ad, type: 2}
   - {fileID: 11400000, guid: 4a17859aad6304c66864ea8fc39bd94f, type: 2}
   - {fileID: 11400000, guid: 2afb36f60754446dfb1cd303194cfecb, type: 2}
   activeModeIndex: 0
@@ -1673,7 +1673,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8dc59f4bce3c246adacf2609a6881a3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  avatarPrefab: {fileID: 183699014172216928, guid: 4100c0e857f74403680f4c2e98cd8e6b, type: 3}
+  avatarPrefab: {fileID: 183699014172216928, guid: 3dd032fdc45a042c98eeea460e82d8f0, type: 3}
   offset: {x: 0, y: -1.3, z: 0}
   seatedAnimatorController: {fileID: 9100000, guid: f7e8d9c0b1a2e3f4d5c6b7a8e9f0d1c2, type: 2}
   seated: 1
@@ -1698,9 +1698,10 @@ MonoBehaviour:
   maxHealth: 100
   playerIndex: 1
   ejectionUpForce: 8
+  ejectionImpactForce: 5
   ejectionRagdollForce: 5
-  ejectionXRange: {x: -2, y: 2}
-  ejectionZRange: {x: -2, y: 2}
+  followEjectedAvatar: 0
+  cameraController: {fileID: 0}
 --- !u!1 &5220610774349003419
 GameObject:
   m_ObjectHideFlags: 0
@@ -2402,7 +2403,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8dc59f4bce3c246adacf2609a6881a3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  avatarPrefab: {fileID: 183699014172216928, guid: 4100c0e857f74403680f4c2e98cd8e6b, type: 3}
+  avatarPrefab: {fileID: 183699014172216928, guid: 3dd032fdc45a042c98eeea460e82d8f0, type: 3}
   offset: {x: 0, y: -1.3, z: 0}
   seatedAnimatorController: {fileID: 9100000, guid: f7e8d9c0b1a2e3f4d5c6b7a8e9f0d1c2, type: 2}
   seated: 1
@@ -2427,9 +2428,10 @@ MonoBehaviour:
   maxHealth: 100
   playerIndex: 3
   ejectionUpForce: 8
+  ejectionImpactForce: 5
   ejectionRagdollForce: 5
-  ejectionXRange: {x: -2, y: 2}
-  ejectionZRange: {x: -2, y: 2}
+  followEjectedAvatar: 0
+  cameraController: {fileID: 0}
 --- !u!1 &6930476221905705165
 GameObject:
   m_ObjectHideFlags: 0
@@ -2607,7 +2609,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8dc59f4bce3c246adacf2609a6881a3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  avatarPrefab: {fileID: 183699014172216928, guid: 4100c0e857f74403680f4c2e98cd8e6b, type: 3}
+  avatarPrefab: {fileID: 183699014172216928, guid: 3dd032fdc45a042c98eeea460e82d8f0, type: 3}
   offset: {x: 0, y: -1.3, z: 0}
   seatedAnimatorController: {fileID: 9100000, guid: f7e8d9c0b1a2e3f4d5c6b7a8e9f0d1c2, type: 2}
   seated: 1
@@ -2632,9 +2634,10 @@ MonoBehaviour:
   maxHealth: 100
   playerIndex: 2
   ejectionUpForce: 8
+  ejectionImpactForce: 5
   ejectionRagdollForce: 5
-  ejectionXRange: {x: -2, y: 2}
-  ejectionZRange: {x: -2, y: 2}
+  followEjectedAvatar: 0
+  cameraController: {fileID: 0}
 --- !u!1 &7049439618078611892
 GameObject:
   m_ObjectHideFlags: 0
@@ -3363,7 +3366,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8dc59f4bce3c246adacf2609a6881a3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  avatarPrefab: {fileID: 183699014172216928, guid: 4100c0e857f74403680f4c2e98cd8e6b, type: 3}
+  avatarPrefab: {fileID: 183699014172216928, guid: 3dd032fdc45a042c98eeea460e82d8f0, type: 3}
   offset: {x: 0, y: -1.3, z: 0}
   seatedAnimatorController: {fileID: 9100000, guid: f7e8d9c0b1a2e3f4d5c6b7a8e9f0d1c2, type: 2}
   seated: 1
@@ -3372,7 +3375,7 @@ MonoBehaviour:
   rightGripOffset: {x: 0.2, y: 0, z: 0}
   massOverride: 10
   centerOfMassY: -0.3
-  vehicleRoot: {fileID: 0}
+  vehicleRoot: {fileID: 5590043452273289933}
 --- !u!114 &1970123848193113377
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3387,10 +3390,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
   maxHealth: 100
   playerIndex: 0
-  ejectionUpForce: 6
+  ejectionUpForce: 8
+  ejectionImpactForce: 5
   ejectionRagdollForce: 3
-  ejectionXRange: {x: -6, y: 6}
-  ejectionZRange: {x: -4, y: 4}
+  followEjectedAvatar: 0
+  cameraController: {fileID: 0}
 --- !u!1 &8724612222226912752
 GameObject:
   m_ObjectHideFlags: 0
@@ -3821,8 +3825,8 @@ MonoBehaviour:
   - {fileID: 5815493322419096863}
   - {fileID: 3457576117955067041}
   vehicleDamageMultiplier: 1
-  playerDamageMultiplier: 80
-  minImpactVelocity: 5
+  playerDamageMultiplier: 4
+  minImpactVelocity: 10
   maxDamagePerImpact: 60
   distanceDamping: 1
   vehicleMaxHealth: 300
