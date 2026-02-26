@@ -60,8 +60,9 @@ public class VehicleDamageReceiver : MonoBehaviour
         vehicleHealth -= vehicleDamage;
         if (vehicleHealth < 0f) vehicleHealth = 0f;
 
-        // Convert local impact position to world space
+        // Convert local impact to world space
         Vector3 worldImpactPos = vehicle.transform.TransformPoint(vehicle.localImpactPosition);
+        Vector3 worldImpactVelocity = vehicle.transform.TransformDirection(vehicle.localImpactVelocity);
 
         // Distribute damage to players based on proximity
         if (playerHealths == null) return;
@@ -76,7 +77,9 @@ public class VehicleDamageReceiver : MonoBehaviour
             float attenuation = 1f / (1f + distance * distanceDamping);
             float playerDamage = Mathf.Min(basePlayerDamage * attenuation, maxDamagePerImpact);
 
-            ph.TakeDamage(playerDamage);
+            // Direction from impact point toward the player (away from impact)
+            Vector3 impactDir = (ph.transform.position - worldImpactPos).normalized;
+            ph.TakeDamage(playerDamage, impactDir);
         }
     }
 }

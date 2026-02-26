@@ -39,6 +39,7 @@ public class SeatedAvatar : MonoBehaviour
     Transform rightHandSource;
 
     public bool IsSpawned => avatarInstance != null;
+    public Transform AvatarTransform => avatarInstance != null ? avatarInstance.transform : null;
     public RagdollAnimator2 Ragdoll => ragdoll;
     public bool IsEjected { get; set; }
 

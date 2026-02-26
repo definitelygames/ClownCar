@@ -17,11 +17,17 @@ public class PlayerHealth : MonoBehaviour
 
     [Header("Ejection Forces")]
     public float ejectionUpForce = 8f;
+    public float ejectionImpactForce = 5f;
     public float ejectionRagdollForce = 5f;
-    public Vector2 ejectionXRange = new Vector2(-2f, 2f);
-    public Vector2 ejectionZRange = new Vector2(-2f, 2f);
+
+    [Header("Camera")]
+    [Tooltip("Switch camera to follow the ejected avatar.")]
+    public bool followEjectedAvatar;
+    [Tooltip("Auto-detected from scene if left empty.")]
+    public VehicleCameraController cameraController;
 
     float currentHealth;
+    Vector3 lastImpactDirection;
     SeatedAvatar seatedAvatar;
     Rigidbody seatRigidbody;
     ConfigurableJoint seatJoint;
@@ -38,12 +44,15 @@ public class PlayerHealth : MonoBehaviour
         seatedAvatar = GetComponent<SeatedAvatar>();
         seatRigidbody = GetComponent<Rigidbody>();
         seatJoint = GetComponent<ConfigurableJoint>();
+        if (cameraController == null)
+            cameraController = FindObjectOfType<VehicleCameraController>();
     }
 
-    public void TakeDamage(float amount)
+    public void TakeDamage(float amount, Vector3 impactDirection)
     {
         if (IsDead || IsEjected) return;
 
+        lastImpactDirection = impactDirection;
         currentHealth -= amount;
 
         if (currentHealth <= 0f)
@@ -78,20 +87,21 @@ public class PlayerHealth : MonoBehaviour
             seatJoint = null;
         }
 
-        // Apply ejection force to seat pivot rigidbody
+        // Apply ejection force: upward + away from impact
         if (seatRigidbody != null)
         {
-            Vector3 spread = new Vector3(
-                Random.Range(ejectionXRange.x, ejectionXRange.y),
-                0f,
-                Random.Range(ejectionZRange.x, ejectionZRange.y));
-            Vector3 ejectionVelocity = Vector3.up * ejectionUpForce + spread;
+            Vector3 impactHorizontal = lastImpactDirection;
+            impactHorizontal.y = 0f;
+            if (impactHorizontal.sqrMagnitude > 0.001f)
+                impactHorizontal.Normalize();
+
+            Vector3 ejectionVelocity = Vector3.up * ejectionUpForce + impactHorizontal * ejectionImpactForce;
             seatRigidbody.AddForce(ejectionVelocity, ForceMode.VelocityChange);
 
             // Push ragdoll bones
             if (ragdoll != null)
             {
-                Vector3 ragdollPush = Vector3.up * ejectionRagdollForce + spread * 0.5f;
+                Vector3 ragdollPush = Vector3.up * ejectionRagdollForce + impactHorizontal * ejectionImpactForce * 0.5f;
                 ragdoll.Handler.User_AddAllBonesImpact(ragdollPush, 0.15f, ForceMode.VelocityChange);
             }
         }
@@ -112,6 +122,14 @@ public class PlayerHealth : MonoBehaviour
             var steering = vehicleRoot.GetComponent<VehicleMultiplayerSteering>();
             if (steering != null)
                 steering.SetPlayerEnabled(playerIndex, false);
+        }
+
+        // Switch camera to follow ejected avatar
+        if (followEjectedAvatar && cameraController != null)
+        {
+            var avatarTransform = seatedAvatar.AvatarTransform;
+            if (avatarTransform != null)
+                cameraController.target = avatarTransform;
         }
 
         OnDeath?.Invoke(this);
